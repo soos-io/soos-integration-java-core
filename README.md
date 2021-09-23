@@ -1,0 +1,1 @@
+# SOOS Integration Java Core
