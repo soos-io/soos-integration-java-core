@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.List;
 
 public enum ManifestFile {
-    RUBY("ruby", Collections.singletonList("Gemfile")),
-    PYTHON("python", Arrays.asList("requirements.txt", "pipfile")),
-    JAVASCRIPT("npm", Arrays.asList("package.json", "package-lock.json")),
+    RUBY("ruby", Arrays.asList("Gemfile", "Gemfile.lock")),
+    PYTHON("python", Arrays.asList("requirements.txt", "pipfile", "*.toml", "poetry.lock")),
+    NPM("npm", Arrays.asList("package.json", "package-lock.json", "yarn.lock")),
     JAVA("java", Collections.singletonList("pom.xml")),
-    NET("NuGet", Arrays.asList("Packages.config", "*.csproj"));
+    NUGET("NuGet", Arrays.asList("packages.config", "*.csproj", "project.assets.json", "*packages.lock.json", "packet*"));
 
     private String name;
     private List<String> files;
