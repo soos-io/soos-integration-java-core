@@ -1,5 +1,4 @@
 package io.soos.integration.domain;
 
-public class StructureAPIResponse {
-
+public class AnalysisResult {
 }

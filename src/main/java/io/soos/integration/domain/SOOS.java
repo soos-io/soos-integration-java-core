@@ -1,16 +1,9 @@
 package io.soos.integration.domain;
 
-import io.soos.integration.api.SOOSAPI;
-import io.soos.integration.commons.Constants;
-import io.soos.integration.domain.Mode;
-import io.soos.integration.domain.OnFailure;
-import io.soos.integration.exceptions.AnalysisFailureException;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class SOOS {
     private final boolean verboseLoggingEnabled;
@@ -34,7 +27,6 @@ public class SOOS {
     private String operatingEnvironment;
     private String integrationName;
 
-    private SOOSAPI api;
 
     public SOOS(String projectName,
                 Mode mode,
@@ -84,8 +76,6 @@ public class SOOS {
                 this.operatingEnvironment = "";
             }
         }
-
-        this.api = new SOOSAPI();
     }
 
     public SOOS(
@@ -273,42 +263,6 @@ public class SOOS {
         return verboseLoggingEnabled;
     }
 
-    public SOOSStructureAPIBody getSOOSStructureAPIBody() {
-        String pattern = "MM/dd/yyyy, hh:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String name = simpleDateFormat.format(new Date());
-        SOOSStructureAPIBody body = new SOOSStructureAPIBody(this.projectName, name);
-
-        if(StringUtils.isNoneEmpty(this.branchUri)) {
-            body.setBranchUri(this.branchUri);
-        }
-
-        if(StringUtils.isNoneEmpty(this.branchName)) {
-            body.setBranch(this.branchName);
-        }
-
-        if(StringUtils.isNoneEmpty(this.commitHash)) {
-            body.setCommitHash(this.commitHash);
-        }
-
-        if(StringUtils.isNoneEmpty(this.buildVersion)) {
-            body.setBuildVersion(this.buildVersion);
-        }
-
-        if(StringUtils.isNoneEmpty(this.buildUri)) {
-            body.setBuildUri(this.buildUri);
-        }
-
-        if(StringUtils.isNoneEmpty(this.operatingEnvironment)) {
-            body.setOperatingEnvironment(this.operatingEnvironment);
-        }
-
-        if(StringUtils.isNoneEmpty(this.integrationName)) {
-            body.setIntegrationName(this.integrationName);
-        }
-
-        return body;
-    }
 
 
 }

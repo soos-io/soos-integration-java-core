@@ -2,30 +2,30 @@ package io.soos.integration.builders;
 
 import io.soos.integration.commons.Constants;
 
-public class APIURLBuilder {
-    protected String baseURL;
+public class SOOSURIBuilder {
+    protected String baseURI;
     protected String clientId;
 
-    public APIURLBuilder() {
+    public SOOSURIBuilder() {
     }
 
-    public APIURLBuilder(String baseURL, String clientId) {
-        this.baseURL = baseURL;
+    public SOOSURIBuilder(String baseURI, String clientId) {
+        this.baseURI = baseURI;
         this.clientId = clientId;
     }
 
-    protected void setBaseURL(String baseURL) {
-        this.baseURL = baseURL;
+    protected void setBaseURI(String baseURI) {
+        this.baseURI = baseURI;
     }
 
     protected void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
-    protected String buildURL() {
+    protected String buildURI() {
         StringBuilder apiURLBuilder = new StringBuilder();
         return apiURLBuilder
-                .append(this.baseURL)
+                .append(this.baseURI)
                 .append(Constants.URL_CLIENTS_PATH)
                 .append(this.clientId)
                 .append(Constants.URL_SLASH)
