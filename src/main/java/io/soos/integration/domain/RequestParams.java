@@ -6,6 +6,10 @@ public class RequestParams {
     protected String method;
     protected String body;
 
+    public RequestParams(String url, String apiKey, String method) {
+        this(url, apiKey, method, null);
+    }
+
     public RequestParams(String url, String apiKey, String method, String body) {
         this.url = url;
         this.apiKey = apiKey;

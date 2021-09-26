@@ -11,8 +11,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 import io.soos.integration.domain.RequestParams;
 
@@ -59,6 +61,30 @@ public class Utils {
         headers.put(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_HEADER_KEY_NAME);
 
         return headers;
+    }
+
+    public static <T, U> List<U> convertArrayToList(T[] from, Function<T, U> func) {
+        return Arrays.stream(from).map(func).collect(Collectors.toList());
+    }
+
+    //for arrays
+    public static <T, U> U[] convertListToArray(List<T> from,
+                                          Function<T, U> func,
+                                          IntFunction<U[]> generator) {
+        return from.stream().map(func).toArray(generator);
+    }
+
+    public static Map<String, String> parseArgs() {
+        HashMap<String, String> params = new HashMap<>();
+
+        params.put(Constants.MAP_PARAM_MODE_KEY, System.getProperty(Constants.PARAM_MODE_KEY));
+        params.put(Constants.MAP_PARAM_ON_FAILURE_KEY, System.getProperty(Constants.PARAM_ON_FAILURE_KEY));
+        params.put(Constants.MAP_PARAM_DIRS_TO_EXCLUDE_KEY, System.getProperty(Constants.PARAM_DIRS_TO_EXCLUDE_KEY));
+        params.put(Constants.MAP_PARAM_FILES_TO_EXCLUDE_KEY, System.getProperty(Constants.PARAM_FILES_TO_EXCLUDE_KEY));
+        params.put(Constants.MAP_PARAM_WORKSPACE_DIR_KEY, System.getProperty(Constants.PARAM_WORKSPACE_DIR_KEY));
+        params.put(Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY, System.getProperty(Constants.PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY));
+
+        return params;
     }
 
 }

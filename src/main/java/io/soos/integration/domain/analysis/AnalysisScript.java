@@ -1,4 +1,7 @@
-package io.soos.integration.domain;
+package io.soos.integration.domain.analysis;
+
+import io.soos.integration.domain.Mode;
+import io.soos.integration.domain.OnFailure;
 
 import java.util.List;
 

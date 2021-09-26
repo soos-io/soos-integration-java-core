@@ -1,4 +1,4 @@
-package io.soos.integration.domain;
+package io.soos.integration.domain.structure;
 
 public class StructureResponse {
     private String structureId;
@@ -7,8 +7,20 @@ public class StructureResponse {
     private String reportURL;
     private String embedUrl;
     private String reportStatusUrl;
+    private StructureAPIResponseBody originalResponse;
 
     public StructureResponse() {
+    }
+
+    public StructureResponse(StructureAPIResponseBody soosResponse) {
+        this(soosResponse.getId(),
+                soosResponse.getProjectId(),
+                soosResponse.getId(),
+                soosResponse.getReportUrl(),
+                soosResponse.getEmbedUrl(),
+                soosResponse.getReportStatusUrl());
+        this.originalResponse = soosResponse;
+
     }
 
     public StructureResponse(String structureId, String projectId, String analysisId, String reportURL, String embedUrl, String reportStatusUrl) {
@@ -66,5 +78,13 @@ public class StructureResponse {
 
     public void setReportStatusUrl(String reportStatusUrl) {
         this.reportStatusUrl = reportStatusUrl;
+    }
+
+    public StructureAPIResponseBody getOriginalResponse() {
+        return originalResponse;
+    }
+
+    public void setOriginalResponse(StructureAPIResponseBody originalResponse) {
+        this.originalResponse = originalResponse;
     }
 }

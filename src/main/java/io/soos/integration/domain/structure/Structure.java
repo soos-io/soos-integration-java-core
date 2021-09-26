@@ -1,20 +1,14 @@
-package io.soos.integration.domain;
+package io.soos.integration.domain.structure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.soos.integration.builders.StructureURIBuilder;
 import io.soos.integration.commons.Utils;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.time.Duration;
+import io.soos.integration.domain.Context;
+import io.soos.integration.domain.RequestParams;
 
 public class Structure {
 
-    private static String generateAPIURL(Context context) {
+    private static String generateURL(Context context) {
         StructureURIBuilder apiBuilder = new StructureURIBuilder();
 
         return apiBuilder
@@ -23,16 +17,19 @@ public class Structure {
                 .buildURI();
     }
 
-    public static Object execute(Context context) throws Exception {
+    public static StructureResponse execute(Context context) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String urlAddress = Structure.generateAPIURL(context);
+        String urlAddress = Structure.generateURL(context);
 
-        StructureBody body = new StructureBody(context);
+        StructureAPIRequestBody body = new StructureAPIRequestBody(context);
 
         RequestParams params = new RequestParams(urlAddress, context.getApiKey(), "POST", objectMapper.writeValueAsString(body));
 
         String response = Utils.performRequest(params);
 
+        StructureAPIResponseBody soosResponse = objectMapper.readValue(response, StructureAPIResponseBody.class);
+
+        return new StructureResponse(soosResponse);
     }
 }

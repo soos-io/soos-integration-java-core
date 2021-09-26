@@ -1,13 +1,14 @@
-package io.soos.integration.domain;
+package io.soos.integration.domain.structure;
 
 import io.soos.integration.commons.Constants;
+import io.soos.integration.domain.Context;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class StructureBody {
+public class StructureAPIRequestBody {
     private String project;
     private String name;
     private String integrationType;
@@ -20,7 +21,7 @@ public class StructureBody {
     private String integrationName;
 
 
-    public StructureBody(Context context) {
+    public StructureAPIRequestBody(Context context) {
         String pattern = "MM/dd/yyyy, hh:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String name = simpleDateFormat.format(new Date());
