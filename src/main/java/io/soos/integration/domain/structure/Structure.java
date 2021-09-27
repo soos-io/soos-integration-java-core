@@ -6,6 +6,9 @@ import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.Context;
 import io.soos.integration.domain.RequestParams;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+
 public class Structure {
 
     private static String generateURL(Context context) {
@@ -28,7 +31,13 @@ public class Structure {
 
         String response = Utils.performRequest(params);
 
-        StructureAPIResponseBody soosResponse = objectMapper.readValue(response, StructureAPIResponseBody.class);
+        LinkedHashMap soosResponse = objectMapper.readValue(response, LinkedHashMap.class);
+
+        List errors = (List) soosResponse.get("errors");
+
+        if(errors.size() > 0) {
+            throw new Exception(errors.toString());
+        }
 
         return new StructureResponse(soosResponse);
     }

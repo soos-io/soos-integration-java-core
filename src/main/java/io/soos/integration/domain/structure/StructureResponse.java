@@ -1,5 +1,9 @@
 package io.soos.integration.domain.structure;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.LinkedHashMap;
+
 public class StructureResponse {
     private String structureId;
     private String projectId;
@@ -7,18 +11,18 @@ public class StructureResponse {
     private String reportURL;
     private String embedUrl;
     private String reportStatusUrl;
-    private StructureAPIResponseBody originalResponse;
+    private LinkedHashMap originalResponse;
 
     public StructureResponse() {
     }
 
-    public StructureResponse(StructureAPIResponseBody soosResponse) {
-        this(soosResponse.getId(),
-                soosResponse.getProjectId(),
-                soosResponse.getId(),
-                soosResponse.getReportUrl(),
-                soosResponse.getEmbedUrl(),
-                soosResponse.getReportStatusUrl());
+    public StructureResponse(LinkedHashMap<String, String> soosResponse) {
+        this(soosResponse.get("Id"),
+                soosResponse.get("projectId"),
+                soosResponse.get("Id"),
+                soosResponse.get("reportUrl"),
+                soosResponse.get("embedUrl"),
+                soosResponse.get("reportStatusUrl"));
         this.originalResponse = soosResponse;
 
     }
@@ -80,11 +84,24 @@ public class StructureResponse {
         this.reportStatusUrl = reportStatusUrl;
     }
 
-    public StructureAPIResponseBody getOriginalResponse() {
+    public LinkedHashMap getOriginalResponse() {
         return originalResponse;
     }
 
-    public void setOriginalResponse(StructureAPIResponseBody originalResponse) {
+    public void setOriginalResponse(LinkedHashMap originalResponse) {
         this.originalResponse = originalResponse;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("structureId", structureId)
+                .append("projectId", projectId)
+                .append("analysisId", analysisId)
+                .append("reportURL", reportURL)
+                .append("embedUrl", embedUrl)
+                .append("reportStatusUrl", reportStatusUrl)
+                .append("originalResponse", originalResponse)
+                .toString();
     }
 }

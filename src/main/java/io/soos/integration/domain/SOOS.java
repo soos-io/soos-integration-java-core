@@ -1,268 +1,36 @@
 package io.soos.integration.domain;
 
+import io.soos.integration.domain.manifest.Manifest;
+import io.soos.integration.domain.manifest.ManifestTypesResponse;
+import io.soos.integration.domain.structure.Structure;
+import io.soos.integration.domain.structure.StructureResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
 public class SOOS {
-    private final boolean verboseLoggingEnabled;
-    private String projectName;
-    private Mode mode;
-    private OnFailure onFailure;
-    private String sourceCodePath;
-    private String clientId;
-    private String apiKey;
-    private String directoriesToExclude;
-    private String filesToExclude;
-    private int analysisResultMaxWait;
-    private int analysisResultPollingInterval;
-    private String baseUri;
-    private String workingDirectory;
-    private String branchUri;
-    private String branchName;
-    private String commitHash;
-    private String buildUri;
-    private String buildVersion;
-    private String operatingEnvironment;
-    private String integrationName;
+    protected Context context;
+    protected Script script;
 
+    public SOOS() throws Exception {
+        this.context = new Context();
+        this.script = new Script();
 
-    public SOOS(String projectName,
-                Mode mode,
-                OnFailure onFailure,
-                String sourceCodePath,
-                String clientId,
-                String apiKey,
-                String directoriesToExclude,
-                String filesToExclude,
-                int analysisResultMaxWait,
-                int analysisResultPollingInterval,
-                String baseUri,
-                String workingDirectory,
-                String branchUri,
-                String branchName,
-                String commitHash,
-                String buildUri,
-                String buildVersion,
-                String operatingEnvironment,
-                String integrationName,
-                boolean verboseLoggingEnabled) {
-        this.projectName = projectName;
-        this.mode = mode;
-        this.onFailure = onFailure;
-        this.sourceCodePath = sourceCodePath;
-        this.clientId = clientId;
-        this.apiKey = apiKey;
-        this.directoriesToExclude = directoriesToExclude;
-        this.filesToExclude = filesToExclude;
-        this.analysisResultMaxWait = analysisResultMaxWait;
-        this.analysisResultPollingInterval = analysisResultPollingInterval;
-        this.baseUri = baseUri;
-        this.workingDirectory = workingDirectory;
-        this.branchUri = branchUri;
-        this.branchName = branchName;
-        this.commitHash = commitHash;
-        this.buildUri = buildUri;
-        this.buildVersion = buildVersion;
-        this.operatingEnvironment = operatingEnvironment;
-        this.integrationName = integrationName;
-        this.verboseLoggingEnabled = verboseLoggingEnabled;
+        boolean load = this.context.load();
 
-        if (StringUtils.isEmpty(this.operatingEnvironment)) {
-            try {
-                this.operatingEnvironment = System.getProperty("os.name");
-            } catch (Exception ex) {
-                this.operatingEnvironment = "";
-            }
+        if(!load) {
+            throw new Exception("Could not find required Environment/Script Variables.");
         }
     }
 
-    public SOOS(
-            String projectName,
-            Mode mode,
-            OnFailure onFailure,
-            String sourceCodePath,
-            String clientId,
-            String apiKey,
-            String directoriesToExclude,
-            String filesToExclude,
-            int analysisResultMaxWait,
-            int analysisResultPollingInterval,
-            String baseUri,
-            String workingDirectory,
-            boolean verboseLoggingEnabled) {
-        this(projectName, mode, onFailure, sourceCodePath, clientId, apiKey,
-                directoriesToExclude, filesToExclude,
-                analysisResultMaxWait, analysisResultPollingInterval,
-                baseUri, workingDirectory,
-                "", // branchUri,
-                "", // branchName,
-                "", // commitHash,
-                "", // buildUri,
-                "", // buildVersion,
-                "", // operatingEnvironment,
-                "",  //integrationName,
-                verboseLoggingEnabled
-        );
+    public ArrayList<LinkedHashMap<String, Object>> loadManifestTypes() throws Exception {
+        return Manifest.getManifestTypes(this.context);
     }
 
-    public String getProjectName() {
-        return projectName;
+    public StructureResponse getStructure() throws Exception {
+        return Structure.execute(this.context);
     }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    public void setMode(Mode mode) {
-        this.mode = mode;
-    }
-
-    public OnFailure getOnFailure() {
-        return onFailure;
-    }
-
-    public void setOnFailure(OnFailure onFailure) {
-        this.onFailure = onFailure;
-    }
-
-    public String getSourceCodePath() {
-        return sourceCodePath;
-    }
-
-    public void setSourceCodePath(String sourceCodePath) {
-        this.sourceCodePath = sourceCodePath;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
-    public String getDirectoriesToExclude() {
-        return directoriesToExclude;
-    }
-
-    public void setDirectoriesToExclude(String directoriesToExclude) {
-        this.directoriesToExclude = directoriesToExclude;
-    }
-
-    public String getFilesToExclude() {
-        return filesToExclude;
-    }
-
-    public void setFilesToExclude(String filesToExclude) {
-        this.filesToExclude = filesToExclude;
-    }
-
-    public int getAnalysisResultMaxWait() {
-        return analysisResultMaxWait;
-    }
-
-    public void setAnalysisResultMaxWait(int analysisResultMaxWait) {
-        this.analysisResultMaxWait = analysisResultMaxWait;
-    }
-
-    public int getAnalysisResultPollingInterval() {
-        return analysisResultPollingInterval;
-    }
-
-    public void setAnalysisResultPollingInterval(int analysisResultPollingInterval) {
-        this.analysisResultPollingInterval = analysisResultPollingInterval;
-    }
-
-    public String getBaseUri() {
-        return baseUri;
-    }
-
-    public void setBaseUri(String baseUri) {
-        this.baseUri = baseUri;
-    }
-
-    public String getWorkingDirectory() {
-        return workingDirectory;
-    }
-
-    public void setWorkingDirectory(String workingDirectory) {
-        this.workingDirectory = workingDirectory;
-    }
-
-    public String getBranchUri() {
-        return branchUri;
-    }
-
-    public void setBranchUri(String branchUri) {
-        this.branchUri = branchUri;
-    }
-
-    public String getBranchName() {
-        return branchName;
-    }
-
-    public void setBranchName(String branchName) {
-        this.branchName = branchName;
-    }
-
-    public String getCommitHash() {
-        return commitHash;
-    }
-
-    public void setCommitHash(String commitHash) {
-        this.commitHash = commitHash;
-    }
-
-    public String getBuildUri() {
-        return buildUri;
-    }
-
-    public void setBuildUri(String buildUri) {
-        this.buildUri = buildUri;
-    }
-
-    public String getBuildVersion() {
-        return buildVersion;
-    }
-
-    public void setBuildVersion(String buildVersion) {
-        this.buildVersion = buildVersion;
-    }
-
-    public String getOperatingEnvironment() {
-        return operatingEnvironment;
-    }
-
-    public void setOperatingEnvironment(String operatingEnvironment) {
-        this.operatingEnvironment = operatingEnvironment;
-    }
-
-    public String getIntegrationName() {
-        return integrationName;
-    }
-
-    public void setIntegrationName(String integrationName) {
-        this.integrationName = integrationName;
-    }
-
-    public boolean isVerboseLoggingEnabled() {
-        return verboseLoggingEnabled;
-    }
-
-
-
 }

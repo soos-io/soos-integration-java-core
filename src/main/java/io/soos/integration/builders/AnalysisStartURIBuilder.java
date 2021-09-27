@@ -7,6 +7,9 @@ public class AnalysisStartURIBuilder extends SOOSURIBuilder implements ISOOSURIB
     protected String projectId;
     protected String analysisId;
 
+    public AnalysisStartURIBuilder() {
+    }
+
     public AnalysisStartURIBuilder(String baseURI, String clientId, String projectId, String analysisId) {
         super(baseURI, clientId);
         this.projectId = projectId;

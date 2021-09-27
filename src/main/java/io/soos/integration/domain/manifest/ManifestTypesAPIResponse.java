@@ -1,15 +1,18 @@
 package io.soos.integration.domain.manifest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ManifestTypesAPIResponse {
     protected String packageManager;
-    protected ManifestTypeDetail[] manifests;
+    protected List<ManifestTypeDetail> manifests;
 
     public ManifestTypesAPIResponse(String packageManager) {
 
-        this(packageManager, new ManifestTypeDetail[0]);
+        this(packageManager, new ArrayList<>());
     }
 
-    public ManifestTypesAPIResponse(String packageManager, ManifestTypeDetail[] manifests) {
+    public ManifestTypesAPIResponse(String packageManager, List<ManifestTypeDetail> manifests) {
         this.packageManager = packageManager;
         this.manifests = manifests;
     }
@@ -22,11 +25,11 @@ public class ManifestTypesAPIResponse {
         this.packageManager = packageManager;
     }
 
-    public ManifestTypeDetail[] getManifests() {
+    public List<ManifestTypeDetail> getManifests() {
         return manifests;
     }
 
-    public void setManifests(ManifestTypeDetail[] manifests) {
+    public void setManifests(List<ManifestTypeDetail> manifests) {
         this.manifests = manifests;
     }
 }

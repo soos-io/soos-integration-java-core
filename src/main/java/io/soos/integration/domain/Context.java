@@ -1,8 +1,11 @@
 package io.soos.integration.domain;
 
 import io.soos.integration.commons.Constants;
+import io.soos.integration.commons.Utils;
 import io.soos.integration.validators.ContextValidator;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Map;
 
 public class Context {
     protected String baseURI;
@@ -19,8 +22,11 @@ public class Context {
     protected String integrationName;
     protected String integrationType;
 
+    private final Map<String, String> params;
+
     public Context() {
         this.integrationType = Constants.INTEGRATION_TYPE;
+        this.params = Utils.parseArgs();
     }
 
     public String getBaseURI() {
@@ -144,15 +150,47 @@ public class Context {
         this.apiKey = System.getenv(Constants.SOOS_API_KEY);
     }
 
-    private void loadFromArgs(Object args) {
+    private void loadFromArgs() {
+        if(StringUtils.isEmpty(this.baseURI)) {
+            this.baseURI = this.params.get(Constants.MAP_PARAM_API_BASE_URI_KEY);
+        }
+
+        if(StringUtils.isEmpty(this.sourceCodePath)) {
+            this.sourceCodePath = this.params.get(Constants.MAP_PARAM_CHECKOUT_DIR_KEY);
+        }
+
+        if(StringUtils.isEmpty(this.projectName)) {
+            this.projectName = this.params.get(Constants.MAP_PARAM_PROJECT_NAME_KEY);
+        }
+
+        // Special Context - loads from script arguments only
+        this.loadPropsFromParams();
+
 
     }
 
-    public boolean load(Object args) {
+    private void loadPropsFromParams() {
+        this.loadProperty(this.commitHash, Constants.MAP_PARAM_COMMIT_HASH_KEY);
+        this.loadProperty(this.branchName, Constants.MAP_PARAM_BRANCH_NAME_KEY);
+        this.loadProperty(this.branchURI, Constants.MAP_PARAM_BRANCH_URI_KEY);
+        this.loadProperty(this.buildVersion, Constants.MAP_PARAM_BUILD_VERSION_KEY);
+        this.loadProperty(this.buildURI, Constants.MAP_PARAM_BUILD_URI_KEY);
+        this.loadProperty(this.operatingEnvironment, Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY);
+        this.loadProperty(this.integrationName, Constants.MAP_PARAM_INTEGRATION_NAME_KEY);
+    }
+
+    private void loadProperty(String property, String paramMapKey) {
+        String paramValue = this.params.get(paramMapKey);
+        if(!StringUtils.isEmpty(paramValue)) {
+            property = paramValue;
+        }
+    }
+
+    public boolean load() {
         this.loadFromEnvVariables();
 
         if(!ContextValidator.validate(this)) {
-            this.loadFromArgs(args);
+            this.loadFromArgs();
 
             return ContextValidator.validate(this);
         }

@@ -14,7 +14,10 @@ public class Constants {
 
     public static String API_HEADER_KEY_NAME = "x-soos-apikey";
     public static String CONTENT_TYPE_HEADER_KEY_NAME = "Content-Type";
+    public static String CONTENT_LENGTH_HEADER_KEY_NAME = "content-length";
     public static String CONTENT_TYPE_HEADER_KEY_VALUE = "application/json";
+    public static String CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE = "'multipart/form-data'";
+    public static String CONTENT_LENGTH_HEADER_KEY_VALUE = "0";
 
     public static final int MANIFEST_API_RETRY_COUNT = 3;
     public static final int STRUCTURE_API_RETRY_COUNT = 3;
@@ -43,6 +46,20 @@ public class Constants {
     public static final String SOOS_PROJECT_NAME = "SOOS_PROJECT_NAME";
     public static final String SOOS_CLIENT_ID = "SOOS_CLIENT_ID";
     public static final String SOOS_API_KEY = "SOOS_API_KEY";
+    public static final String SOOS_MODE = "SOOS_MODE";
+    public static final String SOOS_ON_FAILURE = "SOOS_ON_FAILURE";
+    public static final String SOOS_DIRS_TO_EXCLUDE = "SOOS_DIRS_TO_EXCLUDE";
+    public static final String SOOS_FILES_TO_EXCLUDE = "SOOS_FILES_TO_EXCLUDE";
+    public static final String SOOS_CHECKOUT_DIR = "SOOS_CHECKOUT_DIR";
+    public static final String SOOS_ANALYSIS_RESULT_MAX_WAIT = "SOOS_ANALYSIS_RESULT_MAX_WAIT";
+    public static final String SOOS_ANALYSIS_RESULT_POLLING_INTERVAL = "SOOS_ANALYSIS_RESULT_POLLING_INTERVAL";
+    public static final String SOOS_COMMIT_HASH = "SOOS_COMMIT_HASH";
+    public static final String SOOS_BRANCH_NAME = "SOOS_BRANCH_NAME";
+    public static final String SOOS_BRANCH_URI = "SOOS_BRANCH_URI";
+    public static final String SOOS_BUILD_VERSION = "SOOS_BUILD_VERSION";
+    public static final String SOOS_BUILD_URI = "SOOS_BUILD_URI";
+    public static final String SOOS_OPERATING_ENVIRONMENT = "SOOS_OPERATING_ENVIRONMENT";
+    public static final String SOOS_INTEGRATION_NAME = "SOOS_INTEGRATION_NAME";
 
     // Params Arguments
     public static final String PARAM_MODE_KEY = "m";
@@ -63,6 +80,8 @@ public class Constants {
     public static final String PARAM_OPERATING_ENVIRONMENT_KEY = "oe";
     public static final String PARAM_INTEGRATION_NAME_KEY = "intn";
 
+    public static final String MAP_PARAM_CLIENT_ID_KEY = "clientId";
+    public static final String MAP_PARAM_API_KEY = "apiKey";
     public static final String MAP_PARAM_MODE_KEY = "mode";
     public static final String MAP_PARAM_ON_FAILURE_KEY = "onFailure";
     public static final String MAP_PARAM_DIRS_TO_EXCLUDE_KEY = "dirsToExclude";

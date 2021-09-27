@@ -17,6 +17,7 @@ import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 import io.soos.integration.domain.RequestParams;
+import org.apache.http.client.methods.HttpPost;
 
 public class Utils {
 
@@ -43,7 +44,8 @@ public class Utils {
         if(Objects.equals(requestParams.getMethod(), "GET") || Objects.equals(requestParams.getMethod(), "DELETE")) {
             requestBuilder = requestBuilder.method(requestParams.getMethod(), HttpRequest.BodyPublishers.noBody());
         } else {
-            requestBuilder = requestBuilder.method(requestParams.getMethod(), HttpRequest.BodyPublishers.ofString(requestParams.getBody()));
+            requestBuilder = requestBuilder.method(requestParams.getMethod(),
+                    HttpRequest.BodyPublishers.ofString(requestParams.getBody().toString()));
         }
 
         HttpResponse<String> response = client.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
@@ -55,12 +57,28 @@ public class Utils {
         }
     }
 
-    public static HashMap<String, String> generateHeaders(String apiKey) {
-        HashMap<String, String> headers = new HashMap<>();
-        headers.put(Constants.API_HEADER_KEY_NAME, apiKey);
-        headers.put(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_HEADER_KEY_NAME);
+    public static String performUploadFileRequest(RequestParams requestParams) throws Exception {
+        HttpClient client = HttpClient.newBuilder().build();
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(requestParams.getUrl()))
+                .timeout(Duration.ofMinutes(1))
+                .header(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey())
+                .header(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE)
+                .header(Constants.CONTENT_LENGTH_HEADER_KEY_NAME, Constants.CONTENT_LENGTH_HEADER_KEY_VALUE);
+        if(Objects.equals(requestParams.getMethod(), "GET") || Objects.equals(requestParams.getMethod(), "DELETE")) {
+            requestBuilder = requestBuilder.method(requestParams.getMethod(),
+                    HttpRequest.BodyPublishers.noBody());
+        } else {
+            requestBuilder = requestBuilder.method(requestParams.getMethod(),
+                    HttpRequest.BodyPublishers.ofString(requestParams.getBody().toString()));
+        }
 
-        return headers;
+        HttpResponse<String> response = client.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+
+        if(response.statusCode() < 300) {
+            return response.body();
+        } else {
+            throw new Exception(response.body());
+        }
     }
 
     public static <T, U> List<U> convertArrayToList(T[] from, Function<T, U> func) {
@@ -83,8 +101,44 @@ public class Utils {
         params.put(Constants.MAP_PARAM_FILES_TO_EXCLUDE_KEY, System.getProperty(Constants.PARAM_FILES_TO_EXCLUDE_KEY));
         params.put(Constants.MAP_PARAM_WORKSPACE_DIR_KEY, System.getProperty(Constants.PARAM_WORKSPACE_DIR_KEY));
         params.put(Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY, System.getProperty(Constants.PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY));
+        params.put(Constants.MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY, System.getProperty(Constants.PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY));
+        params.put(Constants.MAP_PARAM_API_BASE_URI_KEY, System.getProperty(Constants.PARAM_API_BASE_URI_KEY));
+        params.put(Constants.MAP_PARAM_CHECKOUT_DIR_KEY, System.getProperty(Constants.PARAM_CHECKOUT_DIR_KEY));
+        params.put(Constants.MAP_PARAM_PROJECT_NAME_KEY, System.getProperty(Constants.PARAM_PROJECT_NAME_KEY));
+        params.put(Constants.MAP_PARAM_COMMIT_HASH_KEY, System.getProperty(Constants.PARAM_COMMIT_HASH_KEY));
+        params.put(Constants.MAP_PARAM_BRANCH_NAME_KEY, System.getProperty(Constants.PARAM_BRANCH_NAME_KEY));
+        params.put(Constants.MAP_PARAM_BRANCH_URI_KEY, System.getProperty(Constants.PARAM_BRANCH_URI_KEY));
+        params.put(Constants.MAP_PARAM_BUILD_VERSION_KEY, System.getProperty(Constants.PARAM_BUILD_VERSION_KEY));
+        params.put(Constants.MAP_PARAM_BUILD_URI_KEY, System.getProperty(Constants.PARAM_BUILD_URI_KEY));
+        params.put(Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY, System.getProperty(Constants.PARAM_OPERATING_ENVIRONMENT_KEY));
+        params.put(Constants.MAP_PARAM_INTEGRATION_NAME_KEY, System.getProperty(Constants.PARAM_INTEGRATION_NAME_KEY));
 
         return params;
+    }
+
+    public static Map<String, String> parseEnvVariables() {
+        HashMap<String, String> envVariables = new HashMap<>();
+
+        envVariables.put(Constants.MAP_PARAM_MODE_KEY, System.getenv(Constants.SOOS_MODE));
+        envVariables.put(Constants.MAP_PARAM_ON_FAILURE_KEY, System.getenv(Constants.SOOS_ON_FAILURE));
+        envVariables.put(Constants.MAP_PARAM_DIRS_TO_EXCLUDE_KEY, System.getenv(Constants.SOOS_DIRS_TO_EXCLUDE));
+        envVariables.put(Constants.MAP_PARAM_FILES_TO_EXCLUDE_KEY, System.getenv(Constants.SOOS_FILES_TO_EXCLUDE));
+        envVariables.put(Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY, System.getenv(Constants.SOOS_ANALYSIS_RESULT_MAX_WAIT));
+        envVariables.put(Constants.MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY, System.getenv(Constants.SOOS_ANALYSIS_RESULT_POLLING_INTERVAL));
+        envVariables.put(Constants.MAP_PARAM_API_BASE_URI_KEY, System.getenv(Constants.SOOS_API_BASE_URI));
+        envVariables.put(Constants.MAP_PARAM_CHECKOUT_DIR_KEY, System.getenv(Constants.SOOS_CHECKOUT_DIR));
+        envVariables.put(Constants.MAP_PARAM_PROJECT_NAME_KEY, System.getenv(Constants.SOOS_PROJECT_NAME));
+        envVariables.put(Constants.MAP_PARAM_COMMIT_HASH_KEY, System.getenv(Constants.SOOS_COMMIT_HASH));
+        envVariables.put(Constants.MAP_PARAM_BRANCH_NAME_KEY, System.getenv(Constants.SOOS_BRANCH_NAME));
+        envVariables.put(Constants.MAP_PARAM_BRANCH_URI_KEY, System.getenv(Constants.SOOS_BRANCH_URI));
+        envVariables.put(Constants.MAP_PARAM_BUILD_VERSION_KEY, System.getenv(Constants.SOOS_BUILD_VERSION));
+        envVariables.put(Constants.MAP_PARAM_BUILD_URI_KEY, System.getenv(Constants.SOOS_BUILD_URI));
+        envVariables.put(Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY, System.getenv(Constants.SOOS_OPERATING_ENVIRONMENT));
+        envVariables.put(Constants.MAP_PARAM_INTEGRATION_NAME_KEY, System.getenv(Constants.SOOS_INTEGRATION_NAME));
+        envVariables.put(Constants.MAP_PARAM_CLIENT_ID_KEY, System.getenv(Constants.SOOS_CLIENT_ID));
+        envVariables.put(Constants.MAP_PARAM_API_KEY, System.getenv(Constants.SOOS_API_KEY));
+
+        return envVariables;
     }
 
 }

@@ -9,6 +9,10 @@ public class ManifestURIBuilder extends SOOSURIBuilder implements ISOOSURIBuilde
     protected String manifestName;
     protected String targetVersion;
 
+    public ManifestURIBuilder() {
+        super();
+    }
+
     public ManifestURIBuilder(String baseURI, String clientId, String projectId, String analysisId, String manifestLabel, String manifestName, String targetVersion) {
         super(baseURI, clientId);
         this.projectId = projectId;

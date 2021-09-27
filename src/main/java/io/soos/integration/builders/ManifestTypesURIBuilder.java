@@ -2,23 +2,23 @@ package io.soos.integration.builders;
 
 import io.soos.integration.commons.Constants;
 
-public class ManifestTypesURLBuilder extends SOOSURIBuilder implements ISOOSURIBuilder<ManifestTypesURLBuilder> {
+public class ManifestTypesURIBuilder extends SOOSURIBuilder implements ISOOSURIBuilder<ManifestTypesURIBuilder> {
 
-    public ManifestTypesURLBuilder() {
+    public ManifestTypesURIBuilder() {
     }
 
-    public ManifestTypesURLBuilder(String baseURL, String clientId) {
+    public ManifestTypesURIBuilder(String baseURL, String clientId) {
         super(baseURL, clientId);
     }
 
     @Override
-    public ManifestTypesURLBuilder baseURI(String baseURI) {
+    public ManifestTypesURIBuilder baseURI(String baseURI) {
         super.setBaseURI(baseURI);
         return this;
     }
 
     @Override
-    public ManifestTypesURLBuilder clientId(String clientId) {
+    public ManifestTypesURIBuilder clientId(String clientId) {
         super.setClientId(clientId);
         return this;
     }

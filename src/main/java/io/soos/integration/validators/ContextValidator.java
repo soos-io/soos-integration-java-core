@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ContextValidator {
 
     public static boolean validate(Context context) {
-        return StringUtils.isAnyEmpty(context.getBaseURI(),
+        return StringUtils.isNoneEmpty(context.getBaseURI(),
                 context.getSourceCodePath(),
                 context.getProjectName(),
                 context.getClientId(),
