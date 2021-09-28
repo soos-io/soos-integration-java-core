@@ -211,3 +211,6 @@ nbdist/
 .nb-gradle/
 
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains,eclipse,netbeans,java
+
+# SOOS
+soos
