@@ -94,14 +94,15 @@ public class StructureResponse {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("structureId", structureId)
-                .append("projectId", projectId)
-                .append("analysisId", analysisId)
-                .append("reportURL", reportURL)
-                .append("embedUrl", embedUrl)
-                .append("reportStatusUrl", reportStatusUrl)
-                .append("originalResponse", originalResponse)
-                .toString();
+        final StringBuilder sb = new StringBuilder("StructureResponse{");
+        sb.append("structureId='").append(structureId).append('\'');
+        sb.append(", projectId='").append(projectId).append('\'');
+        sb.append(", analysisId='").append(analysisId).append('\'');
+        sb.append(", reportURL='").append(reportURL).append('\'');
+        sb.append(", embedUrl='").append(embedUrl).append('\'');
+        sb.append(", reportStatusUrl='").append(reportStatusUrl).append('\'');
+        sb.append(", originalResponse=").append(originalResponse);
+        sb.append('}');
+        return sb.toString();
     }
 }

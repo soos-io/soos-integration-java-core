@@ -5,32 +5,40 @@ import io.soos.integration.builders.AnalysisStartURIBuilder;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.Context;
 import io.soos.integration.domain.RequestParams;
+import io.soos.integration.domain.manifest.Manifest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 
 public class AnalysisStart {
+    private final Logger LOG = LoggerFactory.getLogger(AnalysisStart.class);
+    protected Context context;
 
-    public static String generateAPIURL(Context context, String projectId, String analysisId) {
+    public AnalysisStart(Context context) {
+        this.context = context;
+    }
+
+    public String generateAPIURL(String projectId, String analysisId) {
         AnalysisStartURIBuilder uriBuilder = new AnalysisStartURIBuilder();
 
-        return uriBuilder.baseURI(context.getBaseURI())
-                .clientId(context.getClientId())
+        return uriBuilder.baseURI(this.context.getBaseURI())
+                .clientId(this.context.getClientId())
                 .projectId(projectId)
                 .analysisId(analysisId)
                 .buildURI();
     }
 
-    public static LinkedHashMap exec(Context context, String projectId, String analysisId) throws Exception {
+    public void execute(String projectId, String analysisId) throws Exception {
+        this.LOG.info("Stating Analysis");
         ObjectMapper objectMapper = new ObjectMapper();
-        String apiURL = AnalysisStart.generateAPIURL(context, projectId, analysisId);
+        String apiURL = this.generateAPIURL(projectId, analysisId);
 
-        RequestParams params = new RequestParams(apiURL, context.getApiKey(), "PUT");
+        RequestParams params = new RequestParams(apiURL, context.getApiKey(), "PUT", "");
 
-        String response = Utils.performUploadFileRequest(params);
+        Utils.analysisStartRequest(params);
 
-        LinkedHashMap soosResponse = objectMapper.readValue(response, LinkedHashMap.class);
-
-        return soosResponse;
+        this.LOG.info("Analysis request is running, once completed, access the report using the links below");
 
     }
 }

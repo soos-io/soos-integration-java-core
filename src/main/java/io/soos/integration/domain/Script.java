@@ -28,6 +28,8 @@ public class Script {
     public Script() {
         this.codeRoot = new File(Utils.getCurrentDirectory());
         this.params = Utils.parseArgs();
+
+        this.load();
     }
 
     public void load() {
@@ -100,14 +102,14 @@ public class Script {
     private void setAnalysisResultMaxWait() {
         String analysisResultMaxWait = this.params.get(Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY);
         if(StringUtils.isNoneEmpty(analysisResultMaxWait)) {
-            this.analysisResultMaxWait = Integer.getInteger(analysisResultMaxWait);
+            this.analysisResultMaxWait = Integer.parseInt(analysisResultMaxWait);
         }
     }
 
     private void setAnalysisResultPoolingInterval() {
         String analysisResultPollingInterval = this.params.get(Constants.MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY);
         if(StringUtils.isNoneEmpty(analysisResultPollingInterval)) {
-            this.analysisResultPoolingInterval = Integer.getInteger(analysisResultPollingInterval);
+            this.analysisResultPoolingInterval = Integer.parseInt(analysisResultPollingInterval);
         }
     }
 

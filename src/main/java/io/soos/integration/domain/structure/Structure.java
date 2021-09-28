@@ -5,29 +5,40 @@ import io.soos.integration.builders.StructureURIBuilder;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.Context;
 import io.soos.integration.domain.RequestParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Structure {
+    private final Logger LOG = LoggerFactory.getLogger(Structure.class);
 
-    private static String generateURL(Context context) {
+    protected Context context;
+
+    public Structure(Context context) {
+        this.context = context;
+    }
+
+    private String generateURL() {
         StructureURIBuilder apiBuilder = new StructureURIBuilder();
 
         return apiBuilder
-                .baseURI(context.getBaseURI())
-                .clientId(context.getClientId())
+                .baseURI(this.context.getBaseURI())
+                .clientId(this.context.getClientId())
                 .buildURI();
     }
 
-    public static StructureResponse execute(Context context) throws Exception {
+    public StructureResponse execute() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        String urlAddress = Structure.generateURL(context);
+        String urlAddress = this.generateURL();
 
-        StructureAPIRequestBody body = new StructureAPIRequestBody(context);
+        this.LOG.info("Performing request to: " + urlAddress);
 
-        RequestParams params = new RequestParams(urlAddress, context.getApiKey(), "POST", objectMapper.writeValueAsString(body));
+        StructureAPIRequestBody body = new StructureAPIRequestBody(this.context);
+
+        RequestParams params = new RequestParams(urlAddress, this.context.getApiKey(), "POST", objectMapper.writeValueAsString(body));
 
         String response = Utils.performRequest(params);
 
@@ -35,7 +46,7 @@ public class Structure {
 
         List errors = (List) soosResponse.get("errors");
 
-        if(errors.size() > 0) {
+        if (errors.size() > 0) {
             throw new Exception(errors.toString());
         }
 

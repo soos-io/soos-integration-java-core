@@ -1,10 +1,8 @@
 package io.soos.integration.domain.manifest;
 
-import io.soos.integration.commons.Utils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ManifestTypesResponse {
@@ -12,7 +10,10 @@ public class ManifestTypesResponse {
 
 
     public ManifestTypesResponse(ArrayList<LinkedHashMap<String, Object>> response) {
-        this.manifests = new HashMap<>();
+        this.manifests = response.stream()
+                .collect(Collectors.toMap(manifest -> manifest.get("packageManager").toString(),
+                        manifest -> ((ArrayList<LinkedHashMap>) manifest.get("manifests"))
+                                .stream().map(detail -> new ManifestTypeDetail(detail.get("pattern").toString(), (boolean) detail.get("isLockFile"))).collect(Collectors.toList())));
     }
 
 
@@ -24,10 +25,19 @@ public class ManifestTypesResponse {
         return this.get(type).stream().map(ManifestTypeDetail::getPattern).collect(Collectors.toList());
     }
 
+    public Map<String, List<ManifestTypeDetail>> getManifests() {
+        return manifests;
+    }
+
+    public void setManifests(Map<String, List<ManifestTypeDetail>> manifests) {
+        this.manifests = manifests;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("manifests", manifests)
-                .toString();
+        final StringBuilder sb = new StringBuilder("ManifestTypesResponse{");
+        sb.append("manifests=").append(manifests);
+        sb.append('}');
+        return sb.toString();
     }
 }

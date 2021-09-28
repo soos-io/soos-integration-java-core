@@ -16,7 +16,7 @@ public class Constants {
     public static String CONTENT_TYPE_HEADER_KEY_NAME = "Content-Type";
     public static String CONTENT_LENGTH_HEADER_KEY_NAME = "content-length";
     public static String CONTENT_TYPE_HEADER_KEY_VALUE = "application/json";
-    public static String CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE = "'multipart/form-data'";
+    public static String CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE = "multipart/form-data";
     public static String CONTENT_LENGTH_HEADER_KEY_VALUE = "0";
 
     public static final int MANIFEST_API_RETRY_COUNT = 3;

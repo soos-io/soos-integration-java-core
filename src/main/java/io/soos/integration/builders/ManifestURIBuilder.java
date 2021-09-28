@@ -37,23 +37,23 @@ public class ManifestURIBuilder extends SOOSURIBuilder implements ISOOSURIBuilde
         return this;
     }
 
-    public ManifestURIBuilder analysisId(String clientId) {
-        this.clientId = clientId;
+    public ManifestURIBuilder analysisId(String analysisId) {
+        this.analysisId = analysisId;
         return this;
     }
 
-    public ManifestURIBuilder manifestLabel(String clientId) {
-        this.clientId = clientId;
+    public ManifestURIBuilder manifestLabel(String manifestLabel) {
+        this.manifestLabel = manifestLabel;
         return this;
     }
 
-    public ManifestURIBuilder manifestName(String clientId) {
-        this.clientId = clientId;
+    public ManifestURIBuilder manifestName(String manifestName) {
+        this.manifestName = manifestName;
         return this;
     }
 
-    public ManifestURIBuilder targetVersion(String clientId) {
-        this.clientId = clientId;
+    public ManifestURIBuilder targetVersion(String targetVersion) {
+        this.targetVersion = targetVersion;
         return this;
     }
 
@@ -73,8 +73,6 @@ public class ManifestURIBuilder extends SOOSURIBuilder implements ISOOSURIBuilde
                 .append(this.manifestLabel)
                 .append(Constants.URL_SLASH)
                 .append(this.manifestName)
-                .append(Constants.URL_SLASH)
-                .append(this.targetVersion)
                 .toString();
     }
 }

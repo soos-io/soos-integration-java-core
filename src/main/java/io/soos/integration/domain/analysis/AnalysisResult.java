@@ -9,15 +9,21 @@ import java.util.LinkedHashMap;
 
 public class AnalysisResult {
 
-    public static LinkedHashMap<String, Object> exec(Context context, String reportStatusURL) throws Exception {
+    protected Context context;
+
+    public AnalysisResult(Context context) {
+        this.context = context;
+    }
+
+    public AnalysisResultResponse execute(String reportStatusURL) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        RequestParams params = new RequestParams(reportStatusURL, context.getApiKey(), "GET");
+        RequestParams params = new RequestParams(reportStatusURL, this.context.getApiKey(), "GET");
 
         String response = Utils.performRequest(params);
 
         LinkedHashMap<String, Object> soosResponse = objectMapper.readValue(response, LinkedHashMap.class);
 
-        return soosResponse;
+        return new AnalysisResultResponse(soosResponse);
     }
 }

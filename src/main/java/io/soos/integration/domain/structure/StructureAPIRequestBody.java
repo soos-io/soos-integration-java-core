@@ -28,34 +28,35 @@ public class StructureAPIRequestBody {
         this.project = context.getProjectName();
         this.name = name;
         this.integrationType = context.getIntegrationType();
+        this.initialize(context);
     }
 
     private void initialize(Context context) {
-        if(StringUtils.isNoneEmpty(context.getBranchURI())) {
+        if(StringUtils.isNotEmpty(context.getBranchURI())) {
             this.setBranchUri(context.getBranchURI());
         }
 
-        if(StringUtils.isNoneEmpty(context.getBranchName())) {
+        if(StringUtils.isNotEmpty(context.getBranchName())) {
             this.setBranch(context.getBranchName());
         }
 
-        if(StringUtils.isNoneEmpty(context.getCommitHash())) {
+        if(StringUtils.isNotEmpty(context.getCommitHash())) {
             this.setCommitHash(context.getCommitHash());
         }
 
-        if(StringUtils.isNoneEmpty(context.getCommitHash())) {
+        if(StringUtils.isNotEmpty(context.getCommitHash())) {
             this.setBuildVersion(context.getCommitHash());
         }
 
-        if(StringUtils.isNoneEmpty(context.getBuildURI())) {
+        if(StringUtils.isNotEmpty(context.getBuildURI())) {
             this.setBuildUri(context.getBuildURI());
         }
 
-        if(StringUtils.isNoneEmpty(context.getOperatingEnvironment())) {
+        if(StringUtils.isNotEmpty(context.getOperatingEnvironment())) {
             this.setOperatingEnvironment(context.getOperatingEnvironment());
         }
 
-        if(StringUtils.isNoneEmpty(context.getIntegrationName())) {
+        if(StringUtils.isNotEmpty(context.getIntegrationName())) {
             this.setIntegrationName(context.getIntegrationName());
         }
     }

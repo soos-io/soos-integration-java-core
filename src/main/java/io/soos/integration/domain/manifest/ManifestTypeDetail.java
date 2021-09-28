@@ -29,9 +29,10 @@ public class ManifestTypeDetail {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("pattern", pattern)
-                .append("isLockFile", isLockFile)
-                .toString();
+        final StringBuilder sb = new StringBuilder("ManifestTypeDetail{");
+        sb.append("pattern='").append(pattern).append('\'');
+        sb.append(", isLockFile=").append(isLockFile);
+        sb.append('}');
+        return sb.toString();
     }
 }

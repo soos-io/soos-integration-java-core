@@ -4,13 +4,13 @@ public class RequestParams {
     protected String url;
     protected String apiKey;
     protected String method;
-    protected Object body;
+    protected String body;
 
     public RequestParams(String url, String apiKey, String method) {
         this(url, apiKey, method, null);
     }
 
-    public RequestParams(String url, String apiKey, String method, Object body) {
+    public RequestParams(String url, String apiKey, String method, String body) {
         this.url = url;
         this.apiKey = apiKey;
         this.method = method;
@@ -41,11 +41,11 @@ public class RequestParams {
         this.method = method;
     }
 
-    public Object getBody() {
+    public String getBody() {
         return body;
     }
 
-    public void setBody(Object body) {
+    public void setBody(String body) {
         this.body = body;
     }
 }

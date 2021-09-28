@@ -1,5 +1,6 @@
 package io.soos.integration.commons;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -8,6 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -16,8 +18,20 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
+import io.soos.integration.domain.RequestParamsManifest;
 import io.soos.integration.domain.RequestParams;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 public class Utils {
 
@@ -57,19 +71,18 @@ public class Utils {
         }
     }
 
-    public static String performUploadFileRequest(RequestParams requestParams) throws Exception {
+    public static String analysisStartRequest(RequestParams requestParams) throws Exception {
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(requestParams.getUrl()))
                 .timeout(Duration.ofMinutes(1))
                 .header(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey())
-                .header(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE)
-                .header(Constants.CONTENT_LENGTH_HEADER_KEY_NAME, Constants.CONTENT_LENGTH_HEADER_KEY_VALUE);
+                .header(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE);
         if(Objects.equals(requestParams.getMethod(), "GET") || Objects.equals(requestParams.getMethod(), "DELETE")) {
             requestBuilder = requestBuilder.method(requestParams.getMethod(),
                     HttpRequest.BodyPublishers.noBody());
         } else {
             requestBuilder = requestBuilder.method(requestParams.getMethod(),
-                    HttpRequest.BodyPublishers.ofString(requestParams.getBody().toString()));
+                    HttpRequest.BodyPublishers.ofString(requestParams.getBody()));
         }
 
         HttpResponse<String> response = client.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
@@ -79,6 +92,57 @@ public class Utils {
         } else {
             throw new Exception(response.body());
         }
+    }
+
+    public static String getFileContent(Path path){
+        List<String> fileContent = null;
+        try {
+            fileContent = Files.readAllLines(
+                    path,
+                    StandardCharsets.UTF_8
+            );
+
+            StringBuilder fcStringBuilder = new StringBuilder();
+
+            for(String aLine : fileContent)
+            {
+                fcStringBuilder.append(aLine);
+            }
+            return fcStringBuilder.toString().trim();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return "";
+        }
+    }
+
+    public static String uploadManifestFile(RequestParamsManifest requestParams) throws Exception {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPut put = new HttpPut(requestParams.getUrl());
+        put.addHeader(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey());
+//        put.addHeader(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE);
+//
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        builder.addBinaryBody("file", requestParams.getFile().toFile());
+        HttpEntity requestEntity = builder.build();
+
+        // Create a custom response handler
+        ResponseHandler<String> responseHandler = response -> {
+            int status = response.getStatusLine().getStatusCode();
+            if (status >= 200 && status < 300) {
+                HttpEntity entity = response.getEntity();
+                return entity != null ? EntityUtils.toString(entity) : null;
+            } else {
+                throw new ClientProtocolException("Unexpected response status: " + status);
+            }
+        };
+//
+        put.setEntity(requestEntity);
+        return httpClient.execute(put, responseHandler);
+
+
     }
 
     public static <T, U> List<U> convertArrayToList(T[] from, Function<T, U> func) {
