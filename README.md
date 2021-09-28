@@ -1,4 +1,20 @@
-# SOOS Integration Java Core
+# SOOS Security Analysis: Java
+## OSS Security for Everyone
+The **SOOS Java Integration Library** is the most flexible way to run **SOOS** against your codebase to gain insights into your open source package risk. Run **locally** or on a **CI/CD
+server**, using either synchronous or asynchronous mode.
+
+## Supported Languages and Package Managers
+
+*	[Node (NPM)](https://www.npmjs.com/)
+*	[Python (pypi)](https://pypi.org/)
+*	[.NET (NuGet)](https://www.nuget.org/)
+*	[Ruby (Ruby Gems)](https://rubygems.org/)
+*	[Java (Maven)](https://maven.apache.org/)
+
+Our full list of supported manifest formats can be found [here](https://kb.soos.io/help/soos-languages-supported).
+
+## Need an Account?
+**Visit [soos.io](https://app.soos.io/register) to create your trial account.**
 
 ## Development
 ### Requirements
