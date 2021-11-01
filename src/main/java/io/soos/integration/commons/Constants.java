@@ -1,9 +1,5 @@
 package io.soos.integration.commons;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Constants {
     public static final int MIN_ANALYSIS_RESULT_POLLING_INTERVAL = 10;
     public static final int MIN_RECOMMENDED_ANALYSIS_RESULT_MAX_WAIT = 300;

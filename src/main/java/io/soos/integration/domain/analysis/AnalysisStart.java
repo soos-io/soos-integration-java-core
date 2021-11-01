@@ -1,15 +1,14 @@
 package io.soos.integration.domain.analysis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.soos.integration.builders.AnalysisStartURIBuilder;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.Context;
 import io.soos.integration.domain.RequestParams;
-import io.soos.integration.domain.manifest.Manifest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.LinkedHashMap;
 
 public class AnalysisStart {
     private final Logger LOG = LoggerFactory.getLogger(AnalysisStart.class);

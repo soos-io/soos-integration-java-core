@@ -1,7 +1,5 @@
 package io.soos.integration.domain.structure;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.LinkedHashMap;
 
 public class StructureResponse {

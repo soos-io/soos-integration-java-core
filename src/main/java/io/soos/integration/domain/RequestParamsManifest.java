@@ -1,6 +1,5 @@
 package io.soos.integration.domain;
 
-import io.soos.integration.domain.RequestParams;
 
 import java.nio.file.Path;
 
