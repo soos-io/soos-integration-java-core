@@ -43,13 +43,13 @@ public class AnalysisResult {
             } 
 
             StringBuilder sb = new StringBuilder().append("Analysis is running, trying again in ")
-                    .append(this.context.getAnalysisResultPoolInterval())
-                    .append(" seconds...");
+                                                    .append(this.context.getAnalysisResultPoolInterval())
+                                                    .append(" seconds...");
 
             this.LOG.info(sb.toString());
             TimeUnit.SECONDS.sleep(this.context.getAnalysisResultPoolInterval());
-            int resultMaxWait = this.context.getAnalysisResultMaxWait() + this.context.getAnalysisResultPoolInterval();
-            this.context.setAnalysisResultMaxWait(resultMaxWait);;
+            int resultMaxWait = this.context.getAnalysisResultMaxWait() - this.context.getAnalysisResultPoolInterval();
+            this.context.setAnalysisResultMaxWait(resultMaxWait);
             
         }
         throw new Exception("Could not get a response from SOOS");

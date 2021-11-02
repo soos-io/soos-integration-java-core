@@ -197,8 +197,6 @@ public class Context {
         this.loadProperty(this.buildURI, Constants.MAP_PARAM_BUILD_URI_KEY);
         this.loadProperty(this.operatingEnvironment, Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY);
         this.loadProperty(this.integrationName, Constants.MAP_PARAM_INTEGRATION_NAME_KEY);
-        this.loadProperty(this.integrationName, Constants.MAP_PARAM_INTEGRATION_NAME_KEY);
-        this.loadProperty(this.integrationName, Constants.MAP_PARAM_INTEGRATION_NAME_KEY);
         this.loadIntProperty(this.analysisResultMaxWait, Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY);
         this.loadIntProperty(this.analysisResultPoolInterval, Constants.MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY );
     }
