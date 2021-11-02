@@ -1,5 +1,6 @@
 package io.soos.integration.domain.analysis;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -27,25 +28,28 @@ public class AnalysisResult {
         ObjectMapper objectMapper = new ObjectMapper();
         RequestParams params = new RequestParams(reportStatusURL, this.context.getApiKey(), "GET");
         
-        LinkedHashMap<String, Object> soosResponse = null;
-        int resultMaxWait = Integer.parseInt(System.getProperty(Constants.PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY));
-        int resultPollingInt = Integer.parseInt(System.getProperty(Constants.PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY));
+        LinkedHashMap<String, Object> soosResponse;
 
             
-        while(resultMaxWait >= 0){
+        while(this.context.getAnalysisResultMaxWait() >= 0){
             String response = Utils.performRequest(params);
             soosResponse = objectMapper.readValue(response, LinkedHashMap.class);
             String status = "";
             if(soosResponse.containsKey("status")) {
                 status = soosResponse.get("status").toString();
             } 
-            if(status.equals("Finished") || status.equals("Failed")){
+            if(Arrays.asList(Constants.REPORT_STATUS_FINISHED, Constants.REPORT_STATUS_FAILED).contains(status)){
                 return new AnalysisResultResponse(soosResponse);
             } 
 
-            this.LOG.info("Analysis is running, trying again in ".concat(String.valueOf(resultPollingInt)).concat(" seconds..."));
-            TimeUnit.SECONDS.sleep(resultPollingInt);
-            resultMaxWait -= resultPollingInt;
+            StringBuilder sb = new StringBuilder().append("Analysis is running, trying again in ")
+                    .append(this.context.getAnalysisResultPoolInterval())
+                    .append(" seconds...");
+
+            this.LOG.info(sb.toString());
+            TimeUnit.SECONDS.sleep(this.context.getAnalysisResultPoolInterval());
+            int resultMaxWait = this.context.getAnalysisResultMaxWait() + this.context.getAnalysisResultPoolInterval();
+            this.context.setAnalysisResultMaxWait(resultMaxWait);;
             
         }
         throw new Exception("Could not get a response from SOOS");
