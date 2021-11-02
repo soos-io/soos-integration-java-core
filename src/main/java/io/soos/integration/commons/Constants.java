@@ -1,9 +1,5 @@
 package io.soos.integration.commons;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Constants {
     public static final int MIN_ANALYSIS_RESULT_POLLING_INTERVAL = 10;
     public static final int MIN_RECOMMENDED_ANALYSIS_RESULT_MAX_WAIT = 300;
@@ -99,4 +95,9 @@ public class Constants {
     public static final String MAP_PARAM_BUILD_URI_KEY = "buildURI";
     public static final String MAP_PARAM_OPERATING_ENVIRONMENT_KEY = "operatingEnvironment";
     public static final String MAP_PARAM_INTEGRATION_NAME_KEY = "integrationName";
+
+    // Report Status
+    public static final String REPORT_STATUS_FINISHED = "Finished";
+    public static final String REPORT_STATUS_FAILED = "Failed";
+    public static final String REPORT_STATUS_QUEUED = "Queued";
 }

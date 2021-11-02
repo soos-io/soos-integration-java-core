@@ -2,7 +2,6 @@ package io.soos.integration;
 
 import io.soos.integration.domain.SOOS;
 import io.soos.integration.domain.analysis.AnalysisResultResponse;
-import io.soos.integration.domain.manifest.ManifestTypesResponse;
 import io.soos.integration.domain.structure.StructureResponse;
 
 public class SOOSApplication {

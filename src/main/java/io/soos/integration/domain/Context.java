@@ -21,12 +21,16 @@ public class Context {
     protected String operatingEnvironment;
     protected String integrationName;
     protected String integrationType;
+    protected int analysisResultMaxWait;
+    protected int analysisResultPoolInterval;
 
     private final Map<String, String> params;
 
     public Context() {
         this.integrationType = Constants.INTEGRATION_TYPE;
         this.params = Utils.parseArgs();
+        this.analysisResultMaxWait = 300;
+        this.analysisResultPoolInterval = 10;
     }
 
     public String getBaseURI() {
@@ -133,6 +137,22 @@ public class Context {
         this.integrationType = integrationType;
     }
 
+    public int getAnalysisResultMaxWait() {
+        return analysisResultMaxWait;
+    }
+
+    public void setAnalysisResultMaxWait(int analysisResultMaxWait) {
+        this.analysisResultMaxWait = analysisResultMaxWait;
+    }
+
+    public int getAnalysisResultPoolInterval() {
+        return analysisResultPoolInterval;
+    }
+
+    public void setAnalysisResultPoolInterval(int analysisResultPoolInterval) {
+        this.analysisResultPoolInterval = analysisResultPoolInterval;
+    }
+
     private void reset() {
         this.baseURI = null;
         this.sourceCodePath = null;
@@ -177,12 +197,23 @@ public class Context {
         this.loadProperty(this.buildURI, Constants.MAP_PARAM_BUILD_URI_KEY);
         this.loadProperty(this.operatingEnvironment, Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY);
         this.loadProperty(this.integrationName, Constants.MAP_PARAM_INTEGRATION_NAME_KEY);
+        this.loadIntProperty(this.analysisResultMaxWait, Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY);
+        this.loadIntProperty(this.analysisResultPoolInterval, Constants.MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY );
     }
 
     private void loadProperty(String property, String paramMapKey) {
         String paramValue = this.params.get(paramMapKey);
+
         if(!StringUtils.isEmpty(paramValue)) {
             property = paramValue;
+        }
+    }
+
+    private void loadIntProperty(int property, String paramMapKey) {
+        String paramValue = this.params.get(paramMapKey);
+
+        if(!StringUtils.isEmpty(paramValue)) {
+            property = Integer.parseInt(paramValue);
         }
     }
 

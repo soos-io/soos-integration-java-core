@@ -214,3 +214,5 @@ nbdist/
 
 # SOOS
 soos
+target
+.DS_Store

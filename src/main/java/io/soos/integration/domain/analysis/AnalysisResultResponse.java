@@ -1,6 +1,7 @@
 package io.soos.integration.domain.analysis;
 
 import java.util.LinkedHashMap;
+import org.apache.commons.lang3.ObjectUtils;
 
 public class AnalysisResultResponse {
     protected String status;
@@ -9,7 +10,7 @@ public class AnalysisResultResponse {
     protected int vulnerabilities;
     protected int violations;
 
-    public AnalysisResultResponse(LinkedHashMap response) {
+    public AnalysisResultResponse(LinkedHashMap response) throws Exception {
         if(response.containsKey("status")) {
             this.status = response.get("status").toString();
         }
@@ -19,8 +20,11 @@ public class AnalysisResultResponse {
         }
 
         if(response.containsKey("result")) {
+        
             LinkedHashMap result = (LinkedHashMap) response.get("result");
-
+            if(ObjectUtils.isEmpty(result)){
+                throw new Exception("Result is null");
+            }
             if(result.containsKey("reportUrl")) {
                 this.reportUrl = result.get("reportUrl").toString();
             }

@@ -1,6 +1,5 @@
 package io.soos.integration.commons;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -13,25 +12,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
-import io.soos.integration.domain.RequestParamsManifest;
-import io.soos.integration.domain.RequestParams;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+
+import io.soos.integration.domain.RequestParams;
+import io.soos.integration.domain.RequestParamsManifest;
 
 public class Utils {
 
@@ -158,7 +159,7 @@ public class Utils {
 
     public static Map<String, String> parseArgs() {
         HashMap<String, String> params = new HashMap<>();
-
+        
         params.put(Constants.MAP_PARAM_MODE_KEY, System.getProperty(Constants.PARAM_MODE_KEY));
         params.put(Constants.MAP_PARAM_ON_FAILURE_KEY, System.getProperty(Constants.PARAM_ON_FAILURE_KEY));
         params.put(Constants.MAP_PARAM_DIRS_TO_EXCLUDE_KEY, System.getProperty(Constants.PARAM_DIRS_TO_EXCLUDE_KEY));

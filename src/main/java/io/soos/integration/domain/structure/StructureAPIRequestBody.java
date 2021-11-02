@@ -1,6 +1,5 @@
 package io.soos.integration.domain.structure;
 
-import io.soos.integration.commons.Constants;
 import io.soos.integration.domain.Context;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
