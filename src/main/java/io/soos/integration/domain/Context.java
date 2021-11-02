@@ -6,7 +6,6 @@ import io.soos.integration.validators.ContextValidator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class Context {
     protected String baseURI;
