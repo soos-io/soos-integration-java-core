@@ -216,3 +216,9 @@ nbdist/
 soos
 target
 .DS_Store
+
+# vscode
+.vscode
+.project
+.classpath
+.attach_pid*

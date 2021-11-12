@@ -1,6 +1,6 @@
-# SOOS Security Analysis: Java
+# SOOS SCA: Java
 ## OSS Security for Everyone
-The **SOOS Java Integration Library** is the most flexible way to run **SOOS** against your codebase to gain insights into your open source package risk. Run **locally** or on a **CI/CD
+The **SOOS SCA Java Library** is the most flexible way to run **SOOS** against your codebase to gain insights into your open source package risk. Run **locally** or on a **CI/CD
 server**, using either synchronous or asynchronous mode.
 
 ## Supported Languages and Package Managers
@@ -30,5 +30,5 @@ mvn clean compile assembly:single
 
 ### Run Locally
 ```bash
-java -Dm=run_and_wait -Dof=fail_the_build -Ddte=soos -Dfte= -Dwd=./ -Darmw=300 -Darpi=10 -Dburi=https://dev-api.soos.io/api/ -Dscp=./ -Dpn="Java Test" soos/soos-ci-analysis-java.jar
+java -Dm=run_and_wait -Dof=fail_the_build -Ddte=soos -Dfte= -Dwd=./ -Darmw=300 -Darpi=10 -Dburi=https://dev-api.soos.io/api/ -Dscp=./ -Dpn="Java Test" soos/soos-sca.jar
 ```
