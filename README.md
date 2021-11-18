@@ -30,5 +30,5 @@ mvn clean compile assembly:single
 
 ### Run Locally
 ```bash
-java -Dm=run_and_wait -Dof=fail_the_build -Ddte=soos -Dfte= -Dwd=./ -Darmw=300 -Darpi=10 -Dburi=https://dev-api.soos.io/api/ -Dscp=./ -Dpn="Java Test" soos/soos-sca.jar
+java -jar -Dm=run_and_wait -Dof=fail_the_build -Ddte=soos -Dfte= -Dwd=./ -Darmw=300 -Darpi=10 -Dburi=https://dev-api.soos.io/api/ -Dscp=./ -Dpn="Java Test" soos/soos-sca.jar
 ```
