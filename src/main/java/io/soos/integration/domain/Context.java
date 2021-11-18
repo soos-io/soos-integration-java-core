@@ -4,8 +4,12 @@ import io.soos.integration.commons.Constants;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.validators.ContextValidator;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 
 public class Context {
     protected String baseURI;
@@ -21,13 +25,18 @@ public class Context {
     protected String operatingEnvironment;
     protected String integrationName;
     protected String integrationType;
+    protected String scriptVersion;
     protected int analysisResultMaxWait;
     protected int analysisResultPoolInterval;
 
     private final Map<String, String> params;
 
+    private final Logger LOG = LoggerFactory.getLogger(Context.class);
+
     public Context() {
+        this.scriptVersion = getVersionFromProperties();
         this.integrationType = Constants.INTEGRATION_TYPE;
+        this.integrationName = Constants.INTEGRATION_NAME;
         this.params = Utils.parseArgs();
         this.analysisResultMaxWait = 300;
         this.analysisResultPoolInterval = 10;
@@ -153,6 +162,10 @@ public class Context {
         this.analysisResultPoolInterval = analysisResultPoolInterval;
     }
 
+    public String getScriptVersion() { return scriptVersion; }
+
+    public void setScriptVersion(String scriptVersion) { this.scriptVersion = scriptVersion; }
+
     private void reset() {
         this.baseURI = null;
         this.sourceCodePath = null;
@@ -190,31 +203,33 @@ public class Context {
     }
 
     private void loadPropsFromParams() {
-        this.loadProperty(this.commitHash, Constants.MAP_PARAM_COMMIT_HASH_KEY);
-        this.loadProperty(this.branchName, Constants.MAP_PARAM_BRANCH_NAME_KEY);
-        this.loadProperty(this.branchURI, Constants.MAP_PARAM_BRANCH_URI_KEY);
-        this.loadProperty(this.buildVersion, Constants.MAP_PARAM_BUILD_VERSION_KEY);
-        this.loadProperty(this.buildURI, Constants.MAP_PARAM_BUILD_URI_KEY);
-        this.loadProperty(this.operatingEnvironment, Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY);
-        this.loadProperty(this.integrationName, Constants.MAP_PARAM_INTEGRATION_NAME_KEY);
-        this.loadIntProperty(this.analysisResultMaxWait, Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY);
-        this.loadIntProperty(this.analysisResultPoolInterval, Constants.MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY );
+        this.commitHash = this.loadProperty(this.commitHash, Constants.MAP_PARAM_COMMIT_HASH_KEY);
+        this.branchName = this.loadProperty(this.branchName, Constants.MAP_PARAM_BRANCH_NAME_KEY);
+        this.branchURI = this.loadProperty(this.branchURI, Constants.MAP_PARAM_BRANCH_URI_KEY);
+        this.buildVersion = this.loadProperty(this.buildVersion, Constants.MAP_PARAM_BUILD_VERSION_KEY);
+        this.buildURI = this.loadProperty(this.buildURI, Constants.MAP_PARAM_BUILD_URI_KEY);
+        this.operatingEnvironment = this.loadProperty(this.operatingEnvironment, Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY);
+        this.integrationName = this.loadProperty(this.integrationName, Constants.MAP_PARAM_INTEGRATION_NAME_KEY);
+        this.analysisResultMaxWait = this.loadIntProperty(this.analysisResultMaxWait, Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY);
+        this.analysisResultPoolInterval = this.loadIntProperty(this.analysisResultPoolInterval, Constants.MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY);
     }
 
-    private void loadProperty(String property, String paramMapKey) {
+    private String loadProperty(String property, String paramMapKey) {
         String paramValue = this.params.get(paramMapKey);
 
         if(!StringUtils.isEmpty(paramValue)) {
-            property = paramValue;
+            return paramValue;
         }
+        return property;
     }
 
-    private void loadIntProperty(int property, String paramMapKey) {
+    private Integer loadIntProperty(int property, String paramMapKey) {
         String paramValue = this.params.get(paramMapKey);
 
         if(!StringUtils.isEmpty(paramValue)) {
-            property = Integer.parseInt(paramValue);
+            return Integer.parseInt(paramValue);
         }
+        return property;
     }
 
     public boolean load() {
@@ -228,5 +243,15 @@ public class Context {
 
         return true;
 
+    }
+
+    private String getVersionFromProperties(){
+        Properties prop = new Properties();
+        try {
+            prop.load(this.getClass().getResourceAsStream("/project.properties"));
+        } catch (IOException e) {
+            LOG.error("Cannot read file 'project.properties'", e);
+        }
+        return prop.getProperty("version");
     }
 }
