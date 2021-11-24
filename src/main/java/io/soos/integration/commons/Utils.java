@@ -159,7 +159,9 @@ public class Utils {
 
     public static Map<String, String> parseArgs() {
         HashMap<String, String> params = new HashMap<>();
-        
+
+        params.put(Constants.MAP_PARAM_CLIENT_ID_KEY, System.getProperty(Constants.SOOS_CLIENT_ID));
+        params.put(Constants.MAP_PARAM_API_KEY, System.getProperty(Constants.SOOS_API_KEY));
         params.put(Constants.MAP_PARAM_MODE_KEY, System.getProperty(Constants.PARAM_MODE_KEY));
         params.put(Constants.MAP_PARAM_ON_FAILURE_KEY, System.getProperty(Constants.PARAM_ON_FAILURE_KEY));
         params.put(Constants.MAP_PARAM_DIRS_TO_EXCLUDE_KEY, System.getProperty(Constants.PARAM_DIRS_TO_EXCLUDE_KEY));

@@ -184,6 +184,12 @@ public class Context {
     }
 
     private void loadFromArgs() {
+        if(StringUtils.isEmpty(this.clientId)){
+            this.clientId = this.params.get(Constants.MAP_PARAM_CLIENT_ID_KEY);
+        }
+        if(StringUtils.isEmpty(this.apiKey)){
+            this.apiKey = this.params.get(Constants.MAP_PARAM_API_KEY);
+        }
         if(StringUtils.isEmpty(this.baseURI)) {
             this.baseURI = this.params.get(Constants.MAP_PARAM_API_BASE_URI_KEY);
         }
