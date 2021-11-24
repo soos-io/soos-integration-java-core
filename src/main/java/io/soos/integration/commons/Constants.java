@@ -86,7 +86,7 @@ public class Constants {
     public static final String MAP_PARAM_FILES_TO_EXCLUDE_KEY = "filesToExclude";
     public static final String MAP_PARAM_WORKSPACE_DIR_KEY = "workspaceDir";
     public static final String MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY = "analysisResultMaxWait";
-    public static final String MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY = "analysisResultPoolingInterval";
+    public static final String MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY = "analysisResultPollingInterval";
     public static final String MAP_PARAM_API_BASE_URI_KEY = "apiBaseURI";
     public static final String MAP_PARAM_CHECKOUT_DIR_KEY = "checkoutDirectory";
     public static final String MAP_PARAM_PROJECT_NAME_KEY = "projectName";
