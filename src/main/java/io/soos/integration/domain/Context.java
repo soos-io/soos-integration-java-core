@@ -37,6 +37,7 @@ public class Context {
         this.scriptVersion = getVersionFromProperties();
         this.integrationType = Constants.INTEGRATION_TYPE;
         this.integrationName = Constants.INTEGRATION_NAME;
+        this.baseURI =  Utils.createApiBaseURI();
         this.params = Utils.parseArgs();
         this.analysisResultMaxWait = 300;
         this.analysisResultPoolInterval = 10;
@@ -209,6 +210,7 @@ public class Context {
     }
 
     private void loadPropsFromParams() {
+        this.baseURI = this.loadProperty(this.baseURI, Constants.MAP_PARAM_API_BASE_URI_KEY);
         this.commitHash = this.loadProperty(this.commitHash, Constants.MAP_PARAM_COMMIT_HASH_KEY);
         this.branchName = this.loadProperty(this.branchName, Constants.MAP_PARAM_BRANCH_NAME_KEY);
         this.branchURI = this.loadProperty(this.branchURI, Constants.MAP_PARAM_BRANCH_URI_KEY);

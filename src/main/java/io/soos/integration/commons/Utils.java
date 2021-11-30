@@ -122,8 +122,7 @@ public class Utils {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPut put = new HttpPut(requestParams.getUrl());
         put.addHeader(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey());
-//        put.addHeader(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE);
-//
+
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         builder.addBinaryBody("file", requestParams.getFile().toFile());
@@ -206,6 +205,10 @@ public class Utils {
         envVariables.put(Constants.MAP_PARAM_API_KEY, System.getenv(Constants.SOOS_API_KEY));
 
         return envVariables;
+    }
+
+    public static String createApiBaseURI(){
+        return new StringBuilder(Constants.SOOS_DEFAULT_API_URL).append(Constants.URL_SLASH).append(Constants.URL_API_PATH).toString();
     }
 
 }
