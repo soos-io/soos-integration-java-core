@@ -167,7 +167,7 @@ public class Context {
     public void setScriptVersion(String scriptVersion) { this.scriptVersion = scriptVersion; }
 
     private void reset() {
-        this.baseURI = Utils.createApiBaseURI();
+        this.baseURI = Constants.SOOS_DEFAULT_API_URL;
         this.sourceCodePath = null;
         this.projectName = null;
         this.clientId = null;

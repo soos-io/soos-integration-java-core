@@ -207,8 +207,4 @@ public class Utils {
         return envVariables;
     }
 
-    public static String createApiBaseURI(){
-        return new StringBuilder(Constants.SOOS_DEFAULT_API_URL).append(Constants.URL_SLASH).append(Constants.URL_API_PATH).toString();
-    }
-
 }
