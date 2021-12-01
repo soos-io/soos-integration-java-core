@@ -37,7 +37,6 @@ public class Context {
         this.scriptVersion = getVersionFromProperties();
         this.integrationType = Constants.INTEGRATION_TYPE;
         this.integrationName = Constants.INTEGRATION_NAME;
-        this.baseURI =  Utils.createApiBaseURI();
         this.params = Utils.parseArgs();
         this.analysisResultMaxWait = 300;
         this.analysisResultPoolInterval = 10;
@@ -168,6 +167,7 @@ public class Context {
     public void setScriptVersion(String scriptVersion) { this.scriptVersion = scriptVersion; }
 
     private void reset() {
+        this.baseURI = Utils.createApiBaseURI();
         this.sourceCodePath = null;
         this.projectName = null;
         this.clientId = null;
