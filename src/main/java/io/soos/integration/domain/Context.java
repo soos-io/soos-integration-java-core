@@ -168,7 +168,6 @@ public class Context {
     public void setScriptVersion(String scriptVersion) { this.scriptVersion = scriptVersion; }
 
     private void reset() {
-        this.baseURI = null;
         this.sourceCodePath = null;
         this.projectName = null;
         this.clientId = null;
@@ -177,7 +176,10 @@ public class Context {
 
     private void loadFromEnvVariables() {
         this.reset();
-        this.baseURI = System.getenv(Constants.SOOS_API_BASE_URI);
+        String baseURIEnvVar = System.getenv(Constants.SOOS_API_BASE_URI);
+        if(!StringUtils.isEmpty(baseURIEnvVar)){
+            this.baseURI = baseURIEnvVar;
+        }
         this.sourceCodePath = System.getenv(Constants.SOOS_ROOT_CODE_PATH);
         this.projectName = System.getenv(Constants.SOOS_PROJECT_NAME);
         this.clientId = System.getenv(Constants.SOOS_CLIENT_ID);
@@ -191,8 +193,10 @@ public class Context {
         if(StringUtils.isEmpty(this.apiKey)){
             this.apiKey = this.params.get(Constants.MAP_PARAM_API_KEY);
         }
-        if(StringUtils.isEmpty(this.baseURI)) {
-            this.baseURI = this.params.get(Constants.MAP_PARAM_API_BASE_URI_KEY);
+
+        String baseURIParam = this.params.get(Constants.MAP_PARAM_API_BASE_URI_KEY);
+        if(!StringUtils.isEmpty(baseURIParam)) {
+            this.baseURI = baseURIParam;
         }
 
         if(StringUtils.isEmpty(this.sourceCodePath)) {

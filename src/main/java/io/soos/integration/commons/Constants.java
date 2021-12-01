@@ -37,7 +37,7 @@ public class Constants {
     public static final String PROJECT_NAME_PATTERN = "[^a-zA-Z0-9 .._-]";
     public static final String VALID_URL_PATTERN = "(https?:\\/\\/)?([\\w\\-])+\\.{1}([a-zA-Z]{2,63})([\\/\\w-]*)*\\/?\\??([^#\\n\\r]*)?#?([^\\n\\r]*)";
 
-    public static final String SOOS_DEFAULT_API_URL = "https://dev-api.soos.io";
+    public static final String SOOS_DEFAULT_API_URL = "https://api.soos.io";
 
     // ENV Variables
     public static final String SOOS_API_BASE_URI = "SOOS_API_BASE_URI";
