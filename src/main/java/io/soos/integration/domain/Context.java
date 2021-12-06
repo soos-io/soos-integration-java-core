@@ -4,12 +4,15 @@ import io.soos.integration.commons.Constants;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.validators.ContextValidator;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Properties;
 
 public class Context {
     protected String baseURI;
@@ -258,12 +261,13 @@ public class Context {
     }
 
     private String getVersionFromProperties(){
-        Properties prop = new Properties();
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+        Model model = null;
         try {
-            prop.load(this.getClass().getResourceAsStream("/project.properties"));
-        } catch (IOException e) {
-            LOG.error("Cannot read file 'project.properties'", e);
+            model = reader.read(new FileReader("pom.xml"));
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
         }
-        return prop.getProperty("version");
+        return model.getVersion();
     }
 }
