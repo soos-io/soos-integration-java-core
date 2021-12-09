@@ -37,7 +37,7 @@ public class Context {
     private final Logger LOG = LoggerFactory.getLogger(Context.class);
 
     public Context() {
-        this.scriptVersion = getVersionFromProperties();
+        this.scriptVersion = getVersionFromPom();
         this.integrationType = Constants.INTEGRATION_TYPE;
         this.integrationName = Constants.INTEGRATION_NAME;
         this.params = Utils.parseArgs();
@@ -260,7 +260,7 @@ public class Context {
 
     }
 
-    private String getVersionFromProperties(){
+    private String getVersionFromPom(){
         MavenXpp3Reader reader = new MavenXpp3Reader();
         Model model = null;
         try {
