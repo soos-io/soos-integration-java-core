@@ -31,6 +31,8 @@ public class Constants {
     public static final String URL_ANALYSIS_PATH = "analysis/";
     public static final String URL_MANIFESTS_PATH = "manifests";
     public static final String URL_STRUCTURE_PATH = "structure";
+    public static final String PROPERTIES_FILE = "/project.properties";
+    public static final String VERSION = "version";
 
     public static final String DEFAULT_ASYNC_RESULT_FILE_NAME = "soos_async.json";
 

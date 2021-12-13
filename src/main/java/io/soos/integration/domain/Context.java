@@ -38,7 +38,7 @@ public class Context {
     private final Logger LOG = LoggerFactory.getLogger(Context.class);
 
     public Context() {
-        this.scriptVersion = getVersionFromProperties();
+        this.scriptVersion = getVersionFromProperties(null);
         this.integrationType = Constants.INTEGRATION_TYPE;
         this.integrationName = Constants.INTEGRATION_NAME;
         this.params = Utils.parseArgs();
@@ -261,23 +261,19 @@ public class Context {
 
     }
 
-    private String getVersionFromProperties(){
+    private String getVersionFromProperties(String version){
+
+        if (!StringUtils.isBlank(version)) {
+            return version;
+        }
 
         Properties prop = new Properties();
         try {
-            prop.load(this.getClass().getResourceAsStream("/project.properties"));
+            prop.load(this.getClass().getResourceAsStream(Constants.PROPERTIES_FILE));
         } catch (IOException e) {
-            LOG.error("Cannot read file 'project.properties'", e);
+            StringBuilder error = new StringBuilder("Cannot read file ").append("'").append(Constants.PROPERTIES_FILE).append("'");
+            LOG.error(error.toString(), e);
         }
-        return prop.getProperty("version");
-
-        /*MavenXpp3Reader reader = new MavenXpp3Reader();
-        Model model = null;
-        try {
-            model = reader.read(new FileReader("pom.xml"));
-        } catch (XmlPullParserException | IOException e) {
-            e.printStackTrace();
-        }
-        return model.getVersion();*/
+        return prop.getProperty(Constants.VERSION);
     }
 }

@@ -60,4 +60,8 @@ public class SOOS {
     public OnFailure getOnFailure() {
         return this.script.getOnFailure();
     }
+
+    public Context getContext() {
+        return this.context;
+    }
 }
