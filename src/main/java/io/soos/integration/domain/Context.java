@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 
 public class Context {
     protected String baseURI;
@@ -37,7 +38,7 @@ public class Context {
     private final Logger LOG = LoggerFactory.getLogger(Context.class);
 
     public Context() {
-        this.scriptVersion = getVersionFromPom();
+        this.scriptVersion = getVersionFromProperties();
         this.integrationType = Constants.INTEGRATION_TYPE;
         this.integrationName = Constants.INTEGRATION_NAME;
         this.params = Utils.parseArgs();
@@ -260,14 +261,23 @@ public class Context {
 
     }
 
-    private String getVersionFromPom(){
-        MavenXpp3Reader reader = new MavenXpp3Reader();
+    private String getVersionFromProperties(){
+
+        Properties prop = new Properties();
+        try {
+            prop.load(this.getClass().getResourceAsStream("/project.properties"));
+        } catch (IOException e) {
+            LOG.error("Cannot read file 'project.properties'", e);
+        }
+        return prop.getProperty("version");
+
+        /*MavenXpp3Reader reader = new MavenXpp3Reader();
         Model model = null;
         try {
             model = reader.read(new FileReader("pom.xml"));
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
-        return model.getVersion();
+        return model.getVersion();*/
     }
 }
