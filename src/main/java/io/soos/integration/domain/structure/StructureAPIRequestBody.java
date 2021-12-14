@@ -18,6 +18,7 @@ public class StructureAPIRequestBody {
     private String buildUri;
     private String operatingEnvironment;
     private String integrationName;
+    private String scriptVersion;
 
 
     public StructureAPIRequestBody(Context context) {
@@ -27,6 +28,7 @@ public class StructureAPIRequestBody {
         this.project = context.getProjectName();
         this.name = name;
         this.integrationType = context.getIntegrationType();
+        this.scriptVersion = context.getScriptVersion();
         this.initialize(context);
     }
 
@@ -140,6 +142,14 @@ public class StructureAPIRequestBody {
         this.integrationName = integrationName;
     }
 
+    public String getScriptVersion() {
+      return scriptVersion;
+    }
+
+    public void setScriptVersion(String scriptVersion) {
+      this.scriptVersion = scriptVersion;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -153,6 +163,7 @@ public class StructureAPIRequestBody {
                 .append("buildUri", buildUri)
                 .append("operatingEnvironment", operatingEnvironment)
                 .append("integrationName", integrationName)
+                .append("scriptVersion", scriptVersion)
                 .toString();
     }
 }

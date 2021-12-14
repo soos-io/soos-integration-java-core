@@ -16,17 +16,19 @@ public class SOOSApplication {
             System.out.println("File processed: " +filesProcessed);
 
             if(filesProcessed > 0) {
-                soos.startAnalysis(structure.getProjectId(), structure.getAnalysisId());
-
+                AnalysisResultResponse results;
                 switch (soos.getMode()) {
                     case RUN_AND_WAIT:
-                        AnalysisResultResponse results = soos.getResults(structure.getReportStatusUrl());
-
+                        soos.startAnalysis(structure.getProjectId(), structure.getAnalysisId());
+                        results = soos.getResults(structure.getReportStatusUrl());
                         System.out.println(results.toString());
                         break;
                     case ASYNC_INIT:
+                        soos.startAnalysis(structure.getProjectId(), structure.getAnalysisId());
                         break;
                     case ASYNC_RESULT:
+                        results = soos.getResults(structure.getReportStatusUrl());
+                        System.out.println(results.toString());
                         break;
                 }
 

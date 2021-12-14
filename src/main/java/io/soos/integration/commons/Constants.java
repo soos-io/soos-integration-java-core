@@ -6,7 +6,9 @@ public class Constants {
 
     public static final int INITIATE_ANALYSIS_EXPECTED_RESPONSE_CODE = 200;
 
-    public static String INTEGRATION_TYPE = "CI";
+    public static String INTEGRATION_TYPE = "Script";
+    public static String INTEGRATION_NAME = "Java-Core";
+
 
     public static String API_HEADER_KEY_NAME = "x-soos-apikey";
     public static String CONTENT_TYPE_HEADER_KEY_NAME = "Content-Type";
@@ -23,18 +25,21 @@ public class Constants {
     public static int MIN_PROJECT_NAME_LENGTH = 5;
 
     public static final String URL_SLASH = "/";
+    public static final String URL_API_PATH = "api/";
     public static final String URL_CLIENTS_PATH = "clients/";
     public static final String URL_PROJECTS_PATH = "projects/";
     public static final String URL_ANALYSIS_PATH = "analysis/";
     public static final String URL_MANIFESTS_PATH = "manifests";
     public static final String URL_STRUCTURE_PATH = "structure";
+    public static final String PROPERTIES_FILE = "/project.properties";
+    public static final String VERSION = "version";
 
     public static final String DEFAULT_ASYNC_RESULT_FILE_NAME = "soos_async.json";
 
     public static final String PROJECT_NAME_PATTERN = "[^a-zA-Z0-9 .._-]";
     public static final String VALID_URL_PATTERN = "(https?:\\/\\/)?([\\w\\-])+\\.{1}([a-zA-Z]{2,63})([\\/\\w-]*)*\\/?\\??([^#\\n\\r]*)?#?([^\\n\\r]*)";
 
-    public static final String SOOS_DEFAULT_API_URL = "https://api.soos.io";
+    public static final String SOOS_DEFAULT_API_URL = "https://api.soos.io/api/";
 
     // ENV Variables
     public static final String SOOS_API_BASE_URI = "SOOS_API_BASE_URI";
@@ -84,7 +89,7 @@ public class Constants {
     public static final String MAP_PARAM_FILES_TO_EXCLUDE_KEY = "filesToExclude";
     public static final String MAP_PARAM_WORKSPACE_DIR_KEY = "workspaceDir";
     public static final String MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY = "analysisResultMaxWait";
-    public static final String MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY = "analysisResultPoolingInterval";
+    public static final String MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY = "analysisResultPollingInterval";
     public static final String MAP_PARAM_API_BASE_URI_KEY = "apiBaseURI";
     public static final String MAP_PARAM_CHECKOUT_DIR_KEY = "checkoutDirectory";
     public static final String MAP_PARAM_PROJECT_NAME_KEY = "projectName";
