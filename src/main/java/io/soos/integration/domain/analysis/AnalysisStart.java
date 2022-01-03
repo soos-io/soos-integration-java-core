@@ -29,15 +29,12 @@ public class AnalysisStart {
     }
 
     public void execute(String projectId, String analysisId) throws Exception {
-        this.LOG.info("Stating Analysis");
         ObjectMapper objectMapper = new ObjectMapper();
         String apiURL = this.generateAPIURL(projectId, analysisId);
 
         RequestParams params = new RequestParams(apiURL, context.getApiKey(), "PUT", "");
 
         Utils.analysisStartRequest(params);
-
-        this.LOG.info("Analysis request is running, once completed, access the report using the links below");
 
     }
 }

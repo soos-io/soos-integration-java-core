@@ -96,21 +96,25 @@ public class Manifest {
 
         List<ManifestResponse> results = new ArrayList<>();
 
-        this.LOG.info("------------------------");
+        this.LOG.info("-------------------------------");
         this.LOG.info("Begin Recursive Manifest Search");
-        this.LOG.info("------------------------");
+        this.LOG.info("-------------------------------");
 
         ManifestTypesResponse manifestTypes = this.getManifestTypes();
 
         manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
-            this.LOG.info("Looking for " + packageManager + " files...");
+            this.LOG.info("--------------------------------------------------------");
+            this.LOG.info("Looking for {} files...", packageManager);
             List<Path> paths = manifestFiles.stream()
                     .map(ManifestTypeDetail::getPattern)
                     .map((pattern) -> this.getFilesPath(pattern, directoriesToExclude, filesToExclude))
                     .flatMap(List::stream)
                     .collect(Collectors.toList());
-            this.LOG.info("Files");
-            this.LOG.info(paths.toString());
+            if(paths.size() > 0) {
+                this.LOG.info("Files: {}", paths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
+            } else {
+                this.LOG.info("No files found.");
+            }
 
             results.addAll(paths.stream().map(file -> {
                 try {
@@ -120,6 +124,8 @@ public class Manifest {
                     return null;
                 }
             }).collect(Collectors.toList()));
+
+            this.LOG.info("--------------------------------------------------------");
 
         });
 
