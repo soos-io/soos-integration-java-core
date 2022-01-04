@@ -23,7 +23,7 @@ public class SOOSApplication {
                     structure = soos.startAnalysis();
                     LOG.info("Analysis request is running");
                     result = soos.getResults(structure.getReportStatusUrl());
-                    LOG.info("Scan Analysis success. To see the results go to: {}", result.getReportUrl());
+                    LOG.info("Scan analysis finished successfully. To see the results go to: {}", result.getReportUrl());
                     break;
                 case ASYNC_INIT:
                     LOG.info("Async Init Scan");
@@ -37,8 +37,7 @@ public class SOOSApplication {
                     String reportStatusUrl = args[0];
                     LOG.info("Checking Scan Status from: {}", reportStatusUrl);
                     result = soos.getResults(reportStatusUrl);
-
-                    LOG.info("Scan Finished success. To see the results go to: {}", result.getReportUrl());
+                    LOG.info("Scan analysis finished successfully. To see the results go to: {}", result.getReportUrl());
                     break;
                 default:
                     throw new Exception("Invalid SCA Mode");
