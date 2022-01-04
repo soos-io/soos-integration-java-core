@@ -33,8 +33,8 @@ public class Structure {
         ObjectMapper objectMapper = new ObjectMapper();
 
         String urlAddress = this.generateURL();
-
-        this.LOG.info("Performing request to: " + urlAddress);
+        this.LOG.info("Creating Analysis Structure");
+        this.LOG.info("Performing request to: {}", urlAddress);
 
         StructureAPIRequestBody body = new StructureAPIRequestBody(this.context);
 

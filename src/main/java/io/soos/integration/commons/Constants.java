@@ -7,7 +7,7 @@ public class Constants {
     public static final int INITIATE_ANALYSIS_EXPECTED_RESPONSE_CODE = 200;
 
     public static String INTEGRATION_TYPE = "Script";
-    public static String INTEGRATION_NAME = "Java-Core";
+    public static String INTEGRATION_NAME = "SOOS-SCA-Java-Core";
 
 
     public static String API_HEADER_KEY_NAME = "x-soos-apikey";

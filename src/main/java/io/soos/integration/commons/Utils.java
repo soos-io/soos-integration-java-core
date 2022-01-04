@@ -33,6 +33,8 @@ import org.apache.http.util.EntityUtils;
 
 import io.soos.integration.domain.RequestParams;
 import io.soos.integration.domain.RequestParamsManifest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Utils {
 
@@ -206,5 +208,4 @@ public class Utils {
 
         return envVariables;
     }
-
 }
