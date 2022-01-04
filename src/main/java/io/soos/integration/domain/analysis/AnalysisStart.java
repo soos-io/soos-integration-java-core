@@ -29,12 +29,8 @@ public class AnalysisStart {
     }
 
     public void execute(String projectId, String analysisId) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
         String apiURL = this.generateAPIURL(projectId, analysisId);
-
         RequestParams params = new RequestParams(apiURL, context.getApiKey(), "PUT", "");
-
         Utils.analysisStartRequest(params);
-
     }
 }
