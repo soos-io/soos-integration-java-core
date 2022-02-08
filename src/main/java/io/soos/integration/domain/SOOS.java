@@ -5,8 +5,8 @@ import io.soos.integration.domain.analysis.AnalysisResultResponse;
 import io.soos.integration.domain.analysis.AnalysisStart;
 import io.soos.integration.domain.manifest.Manifest;
 import io.soos.integration.domain.manifest.ManifestTypesResponse;
-import io.soos.integration.domain.structure.Structure;
-import io.soos.integration.domain.structure.StructureResponse;
+import io.soos.integration.domain.scan.Scan;
+import io.soos.integration.domain.scan.ScanResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ public class SOOS {
     private final Logger LOG = LoggerFactory.getLogger(SOOS.class);
     protected Context context;
     protected Script script;
-    protected Structure structure;
+    protected Scan scan;
     protected Manifest manifest;
     protected AnalysisStart analysisStart;
     protected AnalysisResult analysisResult;
@@ -29,7 +29,7 @@ public class SOOS {
             throw new Exception("Could not find required Environment/Script Variables.");
         }
 
-        this.structure = new Structure(this.context);
+        this.scan = new Scan(this.context);
         this.manifest = new Manifest(this.context);
         this.analysisStart = new AnalysisStart(this.context);
         this.analysisResult = new AnalysisResult(this.context);
@@ -44,14 +44,14 @@ public class SOOS {
         return this.manifest.sendManifests(projectId, analysisId, this.script.getDirectoriesToExclude(), this.script.getFilesToExclude());
     }
 
-    public StructureResponse getStructure() throws Exception {
-        return this.structure.execute();
+    public ScanResponse getCreateScan() throws Exception {
+        return this.scan.execute();
     }
 
-    public StructureResponse startAnalysis() throws Exception {
-        StructureResponse structure = this.getStructure();
+    public ScanResponse startAnalysis() throws Exception {
+        ScanResponse structure = this.getCreateScan();
         String projectId = structure.getProjectId();
-        String analysisId = structure.getAnalysisId();
+        String analysisId = structure.getScanId();
         LOG.info("----------------------------------");
         LOG.info("Analysis Structure Request Created");
         LOG.info("----------------------------------");

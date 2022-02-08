@@ -29,8 +29,10 @@ public class Constants {
     public static final String URL_CLIENTS_PATH = "clients/";
     public static final String URL_PROJECTS_PATH = "projects/";
     public static final String URL_ANALYSIS_PATH = "analysis/";
+    public static final String URL_SCAN_TYPES_PATH = "scan-types/";
     public static final String URL_MANIFESTS_PATH = "manifests";
     public static final String URL_STRUCTURE_PATH = "structure";
+    public static final String URL_SCANS_PATH = "scans";
     public static final String PROPERTIES_FILE = "/project.properties";
     public static final String VERSION = "version";
 
