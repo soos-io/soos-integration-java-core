@@ -1,5 +1,18 @@
 package io.soos.integration.commons;
 
+import io.soos.integration.domain.RequestParams;
+import io.soos.integration.domain.RequestParamsManifest;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -12,33 +25,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-
-import io.soos.integration.domain.RequestParams;
-import io.soos.integration.domain.RequestParamsManifest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Utils {
 
-    public static String UrlEncode(String valueToEncode){
+    public static String UrlEncode(String valueToEncode) {
         // Method to encode a string value using `UTF-8` encoding scheme
         try {
             return URLEncoder.encode(valueToEncode, StandardCharsets.UTF_8.toString());
@@ -58,16 +52,16 @@ public class Utils {
                 .timeout(Duration.ofMinutes(1))
                 .header(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey())
                 .header(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_HEADER_KEY_VALUE);
-        if(Objects.equals(requestParams.getMethod(), "GET") || Objects.equals(requestParams.getMethod(), "DELETE")) {
+        if (Objects.equals(requestParams.getMethod(), "GET") || Objects.equals(requestParams.getMethod(), "DELETE")) {
             requestBuilder = requestBuilder.method(requestParams.getMethod(), HttpRequest.BodyPublishers.noBody());
         } else {
             requestBuilder = requestBuilder.method(requestParams.getMethod(),
-                    HttpRequest.BodyPublishers.ofString(requestParams.getBody().toString()));
+                    HttpRequest.BodyPublishers.ofString(requestParams.getBody()));
         }
 
         HttpResponse<String> response = client.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
 
-        if(response.statusCode() < 300) {
+        if (response.statusCode() < 300) {
             return response.body();
         } else {
             throw new Exception(response.body());
@@ -80,7 +74,7 @@ public class Utils {
                 .timeout(Duration.ofMinutes(1))
                 .header(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey())
                 .header(Constants.CONTENT_TYPE_HEADER_KEY_NAME, Constants.CONTENT_TYPE_MULTIPART_HEADER_KEY_VALUE);
-        if(Objects.equals(requestParams.getMethod(), "GET") || Objects.equals(requestParams.getMethod(), "DELETE")) {
+        if (Objects.equals(requestParams.getMethod(), "GET") || Objects.equals(requestParams.getMethod(), "DELETE")) {
             requestBuilder = requestBuilder.method(requestParams.getMethod(),
                     HttpRequest.BodyPublishers.noBody());
         } else {
@@ -90,14 +84,14 @@ public class Utils {
 
         HttpResponse<String> response = client.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
 
-        if(response.statusCode() < 300) {
+        if (response.statusCode() < 300) {
             return response.body();
         } else {
             throw new Exception(response.body());
         }
     }
 
-    public static String getFileContent(Path path){
+    public static String getFileContent(Path path) {
         List<String> fileContent = null;
         try {
             fileContent = Files.readAllLines(
@@ -107,8 +101,7 @@ public class Utils {
 
             StringBuilder fcStringBuilder = new StringBuilder();
 
-            for(String aLine : fileContent)
-            {
+            for (String aLine : fileContent) {
                 fcStringBuilder.append(aLine);
             }
             return fcStringBuilder.toString().trim();
@@ -127,7 +120,15 @@ public class Utils {
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        builder.addBinaryBody("file", requestParams.getFile().toFile());
+        List<File> files = requestParams.getFiles().stream().map(Path::toFile).collect(Collectors.toList());
+        for( int i = 0; i < files.size(); i++) {
+            String suffix = String.valueOf(i);
+            if(i == 0) {
+                suffix = "";
+            }
+            builder.addBinaryBody("file"+suffix, files.get(i));
+            builder.addPart()
+        }
         HttpEntity requestEntity = builder.build();
 
         // Create a custom response handler
@@ -153,8 +154,8 @@ public class Utils {
 
     //for arrays
     public static <T, U> U[] convertListToArray(List<T> from,
-                                          Function<T, U> func,
-                                          IntFunction<U[]> generator) {
+                                                Function<T, U> func,
+                                                IntFunction<U[]> generator) {
         return from.stream().map(func).toArray(generator);
     }
 
@@ -207,5 +208,25 @@ public class Utils {
         envVariables.put(Constants.MAP_PARAM_API_KEY, System.getenv(Constants.SOOS_API_KEY));
 
         return envVariables;
+    }
+
+
+    private static String getManifestLabel(Path file) {
+        try {
+            return URLEncoder.encode(file.getParent().getFileName().toString(), StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException exception) {
+            this.LOG.error(exception.getMessage());
+            return "";
+        }
+    }
+
+
+    private static String getManifestName(Path file) {
+        try {
+            return URLEncoder.encode(file.getFileName().toString().replace(".", "*"), StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException exception) {
+            this.LOG.error(exception.getMessage());
+            return "";
+        }
     }
 }

@@ -57,26 +57,6 @@ public class Manifest {
     }
 
 
-    private String getManifestLabel(Path file) {
-        try {
-            return URLEncoder.encode(file.getParent().getFileName().toString(), StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException exception) {
-            this.LOG.error(exception.getMessage());
-            return "";
-        }
-    }
-
-
-    private String getManifestName(Path file) {
-        try {
-            return URLEncoder.encode(file.getFileName().toString().replace(".", "*"), StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException exception) {
-            this.LOG.error(exception.getMessage());
-            return "";
-        }
-    }
-
-
     private List<Path> getFilesPath(String pattern, List<File> directoriesToExclude, List<File> filesToExclude) {
         String codeRoot = this.context.getSourceCodePath();
 
@@ -116,9 +96,13 @@ public class Manifest {
                 this.LOG.info("No files found.");
             }
 
+
+
+            results.add(this.exec(projectId, analysisId, paths))
+
             results.addAll(paths.stream().map(file -> {
                 try {
-                    return this.exec(projectId, analysisId, file);
+                    return this.exec(projectId, analysisId, results);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
@@ -132,7 +116,7 @@ public class Manifest {
         return results.stream().filter(Objects::nonNull).count();
     }
 
-    private String generateManifestURL(String projectId, String analysisId, String manifestLabel, String manifestName) {
+    private String generateManifestURL(String projectId, String analysisId) {
         ManifestURIBuilder apiBuilder = new ManifestURIBuilder();
 
         return apiBuilder
@@ -140,20 +124,18 @@ public class Manifest {
                 .clientId(this.context.getClientId())
                 .projectId(projectId)
                 .analysisId(analysisId)
-                .manifestLabel(manifestLabel)
-                .manifestName(manifestName)
                 .buildURI();
     }
 
-    public ManifestResponse exec(String projectId, String analysisId, Path manifestPath) throws Exception {
+    public ManifestResponse exec(String projectId, String analysisId, List<Path> manifestPaths) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         String manifestLabel = this.getManifestLabel(manifestPath);
         String manifestName = this.getManifestName(manifestPath);
-        String apiURL = this.generateManifestURL(projectId, analysisId, manifestLabel, manifestName);
+        String apiURL = this.generateManifestURL(projectId, analysisId);
 
         this.LOG.info("Send Manifest URL: " + apiURL);
 
-        RequestParamsManifest params = new RequestParamsManifest(apiURL, this.context.getApiKey(), "PUT", manifestPath);
+        RequestParamsManifest params = new RequestParamsManifest(apiURL, this.context.getApiKey(), "POST", manifestPaths);
 
         String response = Utils.uploadManifestFile(params);
 
