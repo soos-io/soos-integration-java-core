@@ -38,7 +38,7 @@ public class AnalysisResult {
             if(soosResponse.containsKey("status")) {
                 status = soosResponse.get("status").toString();
             } 
-            if(Arrays.asList(Constants.REPORT_STATUS_FINISHED, Constants.REPORT_STATUS_FAILED).contains(status)){
+            if(Arrays.asList(Constants.REPORT_STATUS_FINISHED, Constants.REPORT_STATUS_FAILED, Constants.REPORT_STATUS_FailedWithIssues).contains(status)){
                 return new AnalysisResultResponse(soosResponse);
             } 
 

@@ -94,20 +94,15 @@ public class Manifest {
                 this.LOG.info("Files: {}", paths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
             } else {
                 this.LOG.info("No files found.");
+                return;
             }
 
 
-
-            results.add(this.exec(projectId, analysisId, paths))
-
-            results.addAll(paths.stream().map(file -> {
-                try {
-                    return this.exec(projectId, analysisId, results);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }).collect(Collectors.toList()));
+            try {
+                results.add(this.exec(projectId, analysisId, paths));
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
 
             this.LOG.info("--------------------------------------------------------");
 
@@ -129,8 +124,6 @@ public class Manifest {
 
     public ManifestResponse exec(String projectId, String analysisId, List<Path> manifestPaths) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        String manifestLabel = this.getManifestLabel(manifestPath);
-        String manifestName = this.getManifestName(manifestPath);
         String apiURL = this.generateManifestURL(projectId, analysisId);
 
         this.LOG.info("Send Manifest URL: " + apiURL);

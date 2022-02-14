@@ -5,7 +5,7 @@ import io.soos.integration.domain.RequestParamsManifest;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -28,6 +28,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -115,19 +116,21 @@ public class Utils {
 
     public static String uploadManifestFile(RequestParamsManifest requestParams) throws Exception {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPut put = new HttpPut(requestParams.getUrl());
-        put.addHeader(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey());
+        HttpPost post = new HttpPost(requestParams.getUrl());
+        post.addHeader(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey());
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         List<File> files = requestParams.getFiles().stream().map(Path::toFile).collect(Collectors.toList());
         for( int i = 0; i < files.size(); i++) {
             String suffix = String.valueOf(i);
-            if(i == 0) {
-                suffix = "";
+            String[] splittedPath = files.get(i).getPath().split(Pattern.quote(File.separator));
+            String label = "";
+            if(splittedPath.length >= 2) {
+                label = splittedPath[splittedPath.length - 2];
             }
             builder.addBinaryBody("file"+suffix, files.get(i));
-            builder.addPart()
+            builder.addTextBody("manifestLabel"+suffix, label);
         }
         HttpEntity requestEntity = builder.build();
 
@@ -141,9 +144,9 @@ public class Utils {
                 throw new ClientProtocolException("Unexpected response status: " + status);
             }
         };
-//
-        put.setEntity(requestEntity);
-        return httpClient.execute(put, responseHandler);
+
+        post.setEntity(requestEntity);
+        return httpClient.execute(post, responseHandler);
 
 
     }
@@ -210,23 +213,4 @@ public class Utils {
         return envVariables;
     }
 
-
-    private static String getManifestLabel(Path file) {
-        try {
-            return URLEncoder.encode(file.getParent().getFileName().toString(), StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException exception) {
-            this.LOG.error(exception.getMessage());
-            return "";
-        }
-    }
-
-
-    private static String getManifestName(Path file) {
-        try {
-            return URLEncoder.encode(file.getFileName().toString().replace(".", "*"), StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException exception) {
-            this.LOG.error(exception.getMessage());
-            return "";
-        }
-    }
 }

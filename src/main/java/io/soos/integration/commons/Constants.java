@@ -107,4 +107,5 @@ public class Constants {
     public static final String REPORT_STATUS_FINISHED = "Finished";
     public static final String REPORT_STATUS_FAILED = "Failed";
     public static final String REPORT_STATUS_QUEUED = "Queued";
+    public static final String REPORT_STATUS_FailedWithIssues = "FailedWithIssues";
 }
