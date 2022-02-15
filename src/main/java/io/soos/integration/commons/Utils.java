@@ -123,7 +123,7 @@ public class Utils {
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         List<File> files = requestParams.getFiles().stream().map(Path::toFile).collect(Collectors.toList());
         for( int i = 0; i < files.size(); i++) {
-            String suffix = String.valueOf(i);
+            String suffix = i > 0 ? String.valueOf(i) : "";
             String[] splittedPath = files.get(i).getPath().split(Pattern.quote(File.separator));
             String label = "";
             if(splittedPath.length >= 2) {
