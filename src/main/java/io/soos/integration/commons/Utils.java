@@ -130,7 +130,7 @@ public class Utils {
                 label = splittedPath[splittedPath.length - 2];
             }
             builder.addBinaryBody("file"+suffix, files.get(i));
-            builder.addTextBody("manifestLabel"+suffix, label);
+            builder.addTextBody("parentFolder"+suffix, label);
         }
         HttpEntity requestEntity = builder.build();
 
