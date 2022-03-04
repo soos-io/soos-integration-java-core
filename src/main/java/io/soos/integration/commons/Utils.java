@@ -1,5 +1,6 @@
 package io.soos.integration.commons;
 
+import io.soos.integration.domain.OnFailure;
 import io.soos.integration.domain.RequestParams;
 import io.soos.integration.domain.RequestParamsManifest;
 import org.apache.http.HttpEntity;
@@ -211,6 +212,10 @@ public class Utils {
         envVariables.put(Constants.MAP_PARAM_API_KEY, System.getenv(Constants.SOOS_API_KEY));
 
         return envVariables;
+    }
+
+    public static boolean ShouldFaildBuild (OnFailure onFailure, String status){
+        return  onFailure == OnFailure.FAIL_THE_BUILD && (status.contains(Constants.REPORT_STATUS_FAILEDWITHISSUES) || status.contains(Constants.REPORT_STATUS_FAILED));
     }
 
 }

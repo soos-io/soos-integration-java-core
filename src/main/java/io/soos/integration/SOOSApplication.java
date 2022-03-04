@@ -1,5 +1,6 @@
 package io.soos.integration;
 
+import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.SOOS;
 import io.soos.integration.domain.analysis.AnalysisResultResponse;
 import io.soos.integration.domain.scan.ScanResponse;
@@ -23,13 +24,25 @@ public class SOOSApplication {
                     scan = soos.startAnalysis();
                     LOG.info("Analysis request is running");
                     result = soos.getResults(scan.getScanStatusUrl());
-                    LOG.info("Scan analysis finished successfully. To see the results go to: {}", result.getReportUrl());
+                    if(Utils.ShouldFaildBuild(soos.getOnFailure(), result.getStatus())){
+                        LOG.info("Scan failed with status {}", result.getStatus());
+                        LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
+                        System.exit(0);
+                    }
+                    LOG.info("Scan analysis finished with status {}. To see the results go to: {}", result.getStatus(), result.getScanUrl());
+                    LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
                     break;
                 case ASYNC_INIT:
                     LOG.info("Async Init Scan");
                     LOG.info("--------------------------------------------");
                     scan = soos.startAnalysis();
                     LOG.info("Analysis request is running, access the report status using this link: {}", scan.getScanStatusUrl());
+                    if(Utils.ShouldFaildBuild(soos.getOnFailure(), result.getStatus())){
+                        LOG.info("Scan failed with status {}", result.getStatus());
+                        LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
+                        System.exit(0);
+                    }
+                    LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
                     break;
                 case ASYNC_RESULT:
                     LOG.info("Async Result Scan");
@@ -37,7 +50,13 @@ public class SOOSApplication {
                     String reportStatusUrl = args[0];
                     LOG.info("Checking Scan Status from: {}", reportStatusUrl);
                     result = soos.getResults(reportStatusUrl);
-                    LOG.info("Scan analysis finished successfully. To see the results go to: {}", result.getReportUrl());
+                    if(Utils.ShouldFaildBuild(soos.getOnFailure(), result.getStatus())){
+                        LOG.info("Scan failed with status {}", result.getStatus());
+                        LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
+                        System.exit(0);
+                    }
+                    LOG.info("Scan analysis finished successfully. To see the results go to: {}", result.getScanUrl());
+                    LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
                     break;
                 default:
                     throw new Exception("Invalid SCA Mode");

@@ -10,6 +10,7 @@ import java.util.Date;
 public class ScanAPIRequestBody {
     private String project;
     private String name;
+    private String projectName;
     private String integrationType;
     private String branchUri;
     private String branch;
@@ -28,6 +29,7 @@ public class ScanAPIRequestBody {
         String name = simpleDateFormat.format(new Date());
         this.project = context.getProjectName();
         this.name = name;
+        this.projectName = context.getProjectName();
         this.integrationType = context.getIntegrationType();
         this.scriptVersion = context.getScriptVersion();
         this.initialize(context);
@@ -38,6 +40,9 @@ public class ScanAPIRequestBody {
             this.setBranchUri(context.getBranchURI());
         }
 
+        if(StringUtils.isNotEmpty(context.getProjectName())) {
+            this.setProjectName(context.getProjectName());
+        }
         if(StringUtils.isNotEmpty(context.getBranchName())) {
             this.setBranch(context.getBranchName());
         }
@@ -135,6 +140,12 @@ public class ScanAPIRequestBody {
         this.operatingEnvironment = operatingEnvironment;
     }
 
+    public String getProjectName(){ return projectName; }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
     public String getIntegrationName() {
         return integrationName;
     }
@@ -164,6 +175,7 @@ public class ScanAPIRequestBody {
         return new ToStringBuilder(this)
                 .append("project", project)
                 .append("name", name)
+                .append("projectName", projectName)
                 .append("integrationType", integrationType)
                 .append("branchUri", branchUri)
                 .append("branch", branch)

@@ -5,10 +5,19 @@ import org.apache.commons.lang3.ObjectUtils;
 
 public class AnalysisResultResponse {
     protected String status;
-    protected String analysisId;
-    protected String reportUrl;
     protected int vulnerabilities;
     protected int violations;
+    protected String clientHash;
+    protected String projectHash;
+    protected String branchHash;
+    protected String scanId;
+    protected String analysisId;
+    protected String scanType;
+    protected String scanUrl;
+    protected String scanSarifUrl;
+    protected String scanStatusUrl;
+    protected String errors;
+
 
     public AnalysisResultResponse(LinkedHashMap response) throws Exception {
         if(response.containsKey("status")) {
@@ -19,24 +28,22 @@ public class AnalysisResultResponse {
             this.analysisId = response.get("analysisId").toString();
         }
 
-        if(response.containsKey("result")) {
-        
-            LinkedHashMap result = (LinkedHashMap) response.get("result");
-            if(ObjectUtils.isEmpty(result)){
-                throw new Exception("Result is null");
-            }
-            if(result.containsKey("reportUrl")) {
-                this.reportUrl = result.get("reportUrl").toString();
-            }
-
-            if(result.containsKey("vulnerabilities")) {
-                this.vulnerabilities = Integer.parseInt(result.get("vulnerabilities").toString());
-            }
-
-            if(result.containsKey("violations")) {
-                this.violations = Integer.parseInt(result.get("violations").toString());
-            }
+        if(response.containsKey("scanStatusUrl")) {
+            this.scanStatusUrl = response.get("scanStatusUrl").toString();
         }
+
+        if(response.containsKey("scanUrl")) {
+            this.scanUrl = response.get("scanUrl").toString();
+        }
+
+        if(response.containsKey("vulnerabilities")) {
+            this.vulnerabilities = Integer.parseInt(response.get("vulnerabilities").toString().replaceAll("[^0-9]", ""));
+        }
+
+        if(response.containsKey("violations")) {
+            this.violations = Integer.parseInt(response.get("violations").toString().replaceAll("[^0-9]", ""));
+        }
+
     }
 
     public String getStatus() {
@@ -55,13 +62,41 @@ public class AnalysisResultResponse {
         this.analysisId = analysisId;
     }
 
-    public String getReportUrl() {
-        return reportUrl;
-    }
+    public String getClientHash() { return clientHash; }
 
-    public void setReportUrl(String reportUrl) {
-        this.reportUrl = reportUrl;
-    }
+    public void setClientHash(String clientHash) { this.clientHash = clientHash; }
+
+    public String getProjectHash() { return projectHash; }
+
+    public void setProjectHash(String projectHash) { this.projectHash = projectHash; }
+
+    public String getBranchHash() { return branchHash; }
+
+    public void setBranchHash(String branchHash) { this.branchHash = branchHash; }
+
+    public String getScanId() { return scanId; }
+
+    public void setScanId(String scanId) { this.scanId = scanId; }
+
+    public String getScanType() { return scanType; }
+
+    public void setScanType(String scanType) { this.scanType = scanType; }
+
+    public String getScanUrl() { return scanUrl; }
+
+    public void setScanUrl(String scanUrl) { this.scanUrl = scanUrl; }
+
+    public String getScanSarifUrl() { return scanSarifUrl; }
+
+    public void setScanSarifUrl(String scanSarifUrl) { this.scanSarifUrl = scanSarifUrl; }
+
+    public String getScanStatusUrl() { return scanStatusUrl; }
+
+    public void setScanStatusUrl(String scanStatusUrl) { this.scanStatusUrl = scanStatusUrl; }
+
+    public String getErrors() { return errors; }
+
+    public void setErrors(String errors) { this.errors = errors; }
 
     public int getVulnerabilities() {
         return vulnerabilities;
@@ -84,7 +119,7 @@ public class AnalysisResultResponse {
         final StringBuilder sb = new StringBuilder("AnalysisResultResponse{");
         sb.append("status='").append(status).append('\'');
         sb.append(", analysisId='").append(analysisId).append('\'');
-        sb.append(", reportUrl='").append(reportUrl).append('\'');
+        sb.append(", scanStatusUrl='").append(scanStatusUrl).append('\'');
         sb.append(", vulnerabilities=").append(vulnerabilities);
         sb.append(", violations=").append(violations);
         sb.append('}');

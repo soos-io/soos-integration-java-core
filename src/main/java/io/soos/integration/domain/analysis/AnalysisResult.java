@@ -38,9 +38,9 @@ public class AnalysisResult {
             if(soosResponse.containsKey("status")) {
                 status = soosResponse.get("status").toString();
             } 
-            if(Arrays.asList(Constants.REPORT_STATUS_FINISHED, Constants.REPORT_STATUS_FAILED, Constants.REPORT_STATUS_FailedWithIssues).contains(status)){
+            if(Arrays.asList(Constants.REPORT_STATUS_FINISHED, Constants.REPORT_STATUS_SUCCEDEDWITHISSUES, Constants.REPORT_STATUS_FAILEDWITHISSUES, Constants.REPORT_STATUS_FAILED).contains(status)){
                 return new AnalysisResultResponse(soosResponse);
-            } 
+            }
 
             StringBuilder sb = new StringBuilder().append("Analysis is running, trying again in ")
                                                     .append(this.context.getAnalysisResultPoolInterval())
