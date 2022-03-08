@@ -2,21 +2,23 @@ package io.soos.integration.domain;
 
 
 import java.nio.file.Path;
+import java.util.List;
 
 public class RequestParamsManifest extends RequestParams {
-    protected Path file;
+    protected List<Path> files;
 
 
-    public RequestParamsManifest(String url, String apiKey, String method, Path file) {
+    public RequestParamsManifest(String url, String apiKey, String method,
+                                 List<Path> files) {
         super(url, apiKey, method, null);
-        this.file = file;
+        this.files = files;
     }
 
-    public Path getFile() {
-        return file;
+    public List<Path> getFiles() {
+        return files;
     }
 
-    public void setFile(Path file) {
-        this.file = file;
+    public void setFiles(List<Path> files) {
+        this.files = files;
     }
 }

@@ -69,10 +69,6 @@ public class ManifestURIBuilder extends SOOSURIBuilder implements ISOOSURIBuilde
                 .append(this.analysisId)
                 .append(Constants.URL_SLASH)
                 .append(Constants.URL_MANIFESTS_PATH)
-                .append(Constants.URL_SLASH)
-                .append(this.manifestLabel)
-                .append(Constants.URL_SLASH)
-                .append(this.manifestName)
                 .toString();
     }
 }

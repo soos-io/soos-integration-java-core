@@ -1,4 +1,4 @@
-package io.soos.integration.domain.structure;
+package io.soos.integration.domain.scan;
 
 import io.soos.integration.domain.Context;
 import org.apache.commons.lang3.StringUtils;
@@ -7,9 +7,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class StructureAPIRequestBody {
+public class ScanAPIRequestBody {
     private String project;
     private String name;
+    private String projectName;
     private String integrationType;
     private String branchUri;
     private String branch;
@@ -19,14 +20,16 @@ public class StructureAPIRequestBody {
     private String operatingEnvironment;
     private String integrationName;
     private String scriptVersion;
+    private String toolName;
 
 
-    public StructureAPIRequestBody(Context context) {
+    public ScanAPIRequestBody(Context context) {
         String pattern = "MM/dd/yyyy, hh:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String name = simpleDateFormat.format(new Date());
         this.project = context.getProjectName();
         this.name = name;
+        this.projectName = context.getProjectName();
         this.integrationType = context.getIntegrationType();
         this.scriptVersion = context.getScriptVersion();
         this.initialize(context);
@@ -37,6 +40,9 @@ public class StructureAPIRequestBody {
             this.setBranchUri(context.getBranchURI());
         }
 
+        if(StringUtils.isNotEmpty(context.getProjectName())) {
+            this.setProjectName(context.getProjectName());
+        }
         if(StringUtils.isNotEmpty(context.getBranchName())) {
             this.setBranch(context.getBranchName());
         }
@@ -134,6 +140,12 @@ public class StructureAPIRequestBody {
         this.operatingEnvironment = operatingEnvironment;
     }
 
+    public String getProjectName(){ return projectName; }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
     public String getIntegrationName() {
         return integrationName;
     }
@@ -150,11 +162,20 @@ public class StructureAPIRequestBody {
       this.scriptVersion = scriptVersion;
     }
 
+    public String getToolName() {
+        return toolName;
+    }
+
+    public void setToolName(String toolName) {
+        this.toolName = toolName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("project", project)
                 .append("name", name)
+                .append("projectName", projectName)
                 .append("integrationType", integrationType)
                 .append("branchUri", branchUri)
                 .append("branch", branch)
@@ -164,6 +185,7 @@ public class StructureAPIRequestBody {
                 .append("operatingEnvironment", operatingEnvironment)
                 .append("integrationName", integrationName)
                 .append("scriptVersion", scriptVersion)
+                .append("toolName", toolName)
                 .toString();
     }
 }
