@@ -213,7 +213,7 @@ nbdist/
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains,eclipse,netbeans,java
 
 # SOOS
-soos
+# soos
 target
 .DS_Store
 
