@@ -90,7 +90,7 @@ public class Manifest {
                            this.LOG.error("Error on manifest search");
                            System.exit(1);
                         }
-                       return null;
+                        return new ArrayList<Path>();
                     })
                     .flatMap(List::stream)
                     .collect(Collectors.toList());
