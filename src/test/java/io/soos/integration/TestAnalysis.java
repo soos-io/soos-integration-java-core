@@ -2,14 +2,10 @@ package io.soos.integration;
 
 
 import com.github.stefanbirkner.systemlambda.SystemLambda;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class TestAnalysis {
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
     void setGeneralParams(){
         System.setProperty("m","run_and_wait");
@@ -29,7 +25,7 @@ public class TestAnalysis {
           SOOSApplication.main(new String[]{});
        });
 
-       Assert.assertEquals(0, status);
+       assertEquals(0, status);
 
     }
 
@@ -42,7 +38,7 @@ public class TestAnalysis {
             SOOSApplication.main(new String[]{});
         });
 
-        Assert.assertEquals(0, status);
+        assertEquals(0, status);
 
     }
 
@@ -55,7 +51,7 @@ public class TestAnalysis {
             SOOSApplication.main(new String[]{});
         });
 
-        Assert.assertEquals(0, status);
+        assertEquals(0, status);
 
     }
 
@@ -68,7 +64,7 @@ public class TestAnalysis {
             SOOSApplication.main(new String[]{});
         });
 
-        Assert.assertEquals(0, status);
+        assertEquals(0, status);
 
     }
 
@@ -81,7 +77,7 @@ public class TestAnalysis {
             SOOSApplication.main(new String[]{});
         });
 
-        Assert.assertEquals(0, status);
+        assertEquals(0, status);
 
     }
 
@@ -94,7 +90,7 @@ public class TestAnalysis {
             SOOSApplication.main(new String[]{});
         });
 
-        Assert.assertEquals(0, status);
+        assertEquals(0, status);
 
     }
 
@@ -107,7 +103,7 @@ public class TestAnalysis {
             SOOSApplication.main(new String[]{});
         });
 
-        Assert.assertEquals(0, status);
+        assertEquals(0, status);
 
     }
 }
