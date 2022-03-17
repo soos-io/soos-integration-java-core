@@ -29,6 +29,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -214,8 +215,19 @@ public class Utils {
         return envVariables;
     }
 
-    public static boolean ShouldFaildBuild (OnFailure onFailure, String status){
+    public static boolean shouldFaildBuild(OnFailure onFailure, String status){
         return  onFailure == OnFailure.FAIL_THE_BUILD && (status.contains(Constants.REPORT_STATUS_FAILEDWITHISSUES) || status.contains(Constants.REPORT_STATUS_FAILED));
+    }
+
+    public static boolean manifestFileIsValid(File pathName, String searchPattern, List<File> dirsToExclude, List<File> filesToExclude) {
+        if(searchPattern.startsWith("*")) {
+            searchPattern = ".".concat(searchPattern);
+        }
+        Pattern pattern = Pattern.compile(searchPattern);
+        Matcher matcher = pattern.matcher(pathName.getName());
+        return !dirsToExclude.contains(pathName.getParentFile()) &&
+                !filesToExclude.contains(pathName) &&
+                matcher.find();
     }
 
 }
