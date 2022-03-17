@@ -3,7 +3,6 @@ package io.soos.integration.domain.manifest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.soos.integration.builders.ManifestTypesURIBuilder;
 import io.soos.integration.builders.ManifestURIBuilder;
-import io.soos.integration.commons.ManifestFilesFilter;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.Context;
 import io.soos.integration.domain.RequestParams;
@@ -13,16 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Manifest {
@@ -57,56 +55,62 @@ public class Manifest {
     }
 
 
-    private List<Path> getFilesPath(String pattern, List<File> directoriesToExclude, List<File> filesToExclude) {
+    private List<Path> getFilesPath(String pattern, List<File> directoriesToExclude, List<File> filesToExclude) throws IOException {
         String codeRoot = this.context.getSourceCodePath();
 
         if (StringUtils.isEmpty(codeRoot)) {
             codeRoot = Utils.getCurrentDirectory();
         }
 
-        File[] files = Paths.get(codeRoot).toFile().listFiles(new ManifestFilesFilter(pattern, directoriesToExclude, filesToExclude));
+        List<Path> paths = new ArrayList<>();
+        Files.find(Paths.get(codeRoot), Integer.MAX_VALUE,(filepath, fileattr) -> fileattr.isRegularFile()).forEach(p -> paths.add(p));
 
-        return Utils.convertArrayToList(files, Function.identity()).stream()
-                .map(file -> Paths.get(file.toURI()))
-                .collect(Collectors.toList());
+        return paths.stream().filter(f -> Utils.manifestFileIsValid(f.toFile(), pattern, directoriesToExclude, filesToExclude)).collect(Collectors.toList());
     }
 
 
     public long sendManifests(String projectId, String analysisId, List<File> directoriesToExclude, List<File> filesToExclude) throws Exception {
-
         List<ManifestResponse> results = new ArrayList<>();
 
-        this.LOG.info("-------------------------------");
-        this.LOG.info("Begin Recursive Manifest Search");
-        this.LOG.info("-------------------------------");
+            this.LOG.info("-------------------------------");
+            this.LOG.info("Begin Recursive Manifest Search");
+            this.LOG.info("-------------------------------");
 
-        ManifestTypesResponse manifestTypes = this.getManifestTypes();
+            ManifestTypesResponse manifestTypes = this.getManifestTypes();
 
-        manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
-            this.LOG.info("--------------------------------------------------------");
-            this.LOG.info("Looking for {} files...", packageManager);
-            List<Path> paths = manifestFiles.stream()
-                    .map(ManifestTypeDetail::getPattern)
-                    .map((pattern) -> this.getFilesPath(pattern, directoriesToExclude, filesToExclude))
-                    .flatMap(List::stream)
-                    .collect(Collectors.toList());
-            if(paths.size() > 0) {
-                this.LOG.info("Files: {}", paths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
-            } else {
-                this.LOG.info("No files found.");
-                return;
-            }
+            manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
+                this.LOG.info("--------------------------------------------------------");
+                this.LOG.info("Looking for {} files...", packageManager);
+                List<Path> paths = manifestFiles.stream()
+                        .map(ManifestTypeDetail::getPattern)
+                        .map((pattern) -> {
+                            try {
+                                return this.getFilesPath(pattern, directoriesToExclude, filesToExclude);
+                            }catch(IOException e){
+                                this.LOG.error("Error during manifest search");
+                                throw new UncheckedIOException(e);
+                            }
+                        })
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+
+                if (paths.size() > 0) {
+                    this.LOG.info("Files: {}", paths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
+                } else {
+                    this.LOG.info("No files found.");
+                    return;
+                }
 
 
-            try {
-                results.add(this.exec(projectId, analysisId, paths));
-            }catch(Exception ex){
-                ex.printStackTrace();
-            }
+                try {
+                    results.add(this.exec(projectId, analysisId, paths));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                this.LOG.info("--------------------------------------------------------");
 
-            this.LOG.info("--------------------------------------------------------");
+            });
 
-        });
 
         return results.stream().filter(Objects::nonNull).count();
     }
