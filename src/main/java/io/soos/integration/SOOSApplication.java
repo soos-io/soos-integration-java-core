@@ -24,7 +24,7 @@ public class SOOSApplication {
                     scan = soos.startAnalysis();
                     LOG.info("Analysis request is running");
                     result = soos.getResults(scan.getScanStatusUrl());
-                    if(Utils.ShouldFaildBuild(soos.getOnFailure(), result.getStatus())){
+                    if(Utils.shouldFaildBuild(soos.getOnFailure(), result.getStatus())){
                         LOG.info("Scan failed with status {}", result.getStatus());
                         LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
                         System.exit(0);
@@ -37,7 +37,7 @@ public class SOOSApplication {
                     LOG.info("--------------------------------------------");
                     scan = soos.startAnalysis();
                     LOG.info("Analysis request is running, access the report status using this link: {}", scan.getScanStatusUrl());
-                    if(Utils.ShouldFaildBuild(soos.getOnFailure(), result.getStatus())){
+                    if(Utils.shouldFaildBuild(soos.getOnFailure(), result.getStatus())){
                         LOG.info("Scan failed with status {}", result.getStatus());
                         LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
                         System.exit(0);
@@ -50,7 +50,7 @@ public class SOOSApplication {
                     String reportStatusUrl = args[0];
                     LOG.info("Checking Scan Status from: {}", reportStatusUrl);
                     result = soos.getResults(reportStatusUrl);
-                    if(Utils.ShouldFaildBuild(soos.getOnFailure(), result.getStatus())){
+                    if(Utils.shouldFaildBuild(soos.getOnFailure(), result.getStatus())){
                         LOG.info("Scan failed with status {}", result.getStatus());
                         LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
                         System.exit(0);

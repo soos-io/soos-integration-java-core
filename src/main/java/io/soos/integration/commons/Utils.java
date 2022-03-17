@@ -215,11 +215,11 @@ public class Utils {
         return envVariables;
     }
 
-    public static boolean ShouldFaildBuild (OnFailure onFailure, String status){
+    public static boolean shouldFaildBuild(OnFailure onFailure, String status){
         return  onFailure == OnFailure.FAIL_THE_BUILD && (status.contains(Constants.REPORT_STATUS_FAILEDWITHISSUES) || status.contains(Constants.REPORT_STATUS_FAILED));
     }
 
-    public static boolean ManifestFileIsValid(File pathName, String searchPattern, List<File> dirsToExclude, List<File> filesToExclude) {
+    public static boolean manifestFileIsValid(File pathName, String searchPattern, List<File> dirsToExclude, List<File> filesToExclude) {
         if(searchPattern.startsWith("*")) {
             searchPattern = ".".concat(searchPattern);
         }

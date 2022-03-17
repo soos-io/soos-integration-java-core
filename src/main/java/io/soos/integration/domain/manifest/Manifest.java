@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,53 +65,52 @@ public class Manifest {
         List<Path> paths = new ArrayList<>();
         Files.find(Paths.get(codeRoot), Integer.MAX_VALUE,(filepath, fileattr) -> fileattr.isRegularFile()).forEach(p -> paths.add(p));
 
-        return paths.stream().filter(f -> Utils.ManifestFileIsValid(f.toFile(), pattern, directoriesToExclude, filesToExclude)).collect(Collectors.toList());
+        return paths.stream().filter(f -> Utils.manifestFileIsValid(f.toFile(), pattern, directoriesToExclude, filesToExclude)).collect(Collectors.toList());
     }
 
 
     public long sendManifests(String projectId, String analysisId, List<File> directoriesToExclude, List<File> filesToExclude) throws Exception {
-
         List<ManifestResponse> results = new ArrayList<>();
 
-        this.LOG.info("-------------------------------");
-        this.LOG.info("Begin Recursive Manifest Search");
-        this.LOG.info("-------------------------------");
+            this.LOG.info("-------------------------------");
+            this.LOG.info("Begin Recursive Manifest Search");
+            this.LOG.info("-------------------------------");
 
-        ManifestTypesResponse manifestTypes = this.getManifestTypes();
+            ManifestTypesResponse manifestTypes = this.getManifestTypes();
 
-        manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
-            this.LOG.info("--------------------------------------------------------");
-            this.LOG.info("Looking for {} files...", packageManager);
-            List<Path> paths = manifestFiles.stream()
-                    .map(ManifestTypeDetail::getPattern)
-                    .map((pattern) -> {
-                        try {
-                            return this.getFilesPath(pattern, directoriesToExclude, filesToExclude);
-                        } catch (IOException e) {
-                           this.LOG.error("Error on manifest search");
-                           System.exit(1);
-                        }
-                        return new ArrayList<Path>();
-                    })
-                    .flatMap(List::stream)
-                    .collect(Collectors.toList());
-            if(paths.size() > 0) {
-                this.LOG.info("Files: {}", paths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
-            } else {
-                this.LOG.info("No files found.");
-                return;
-            }
+            manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
+                this.LOG.info("--------------------------------------------------------");
+                this.LOG.info("Looking for {} files...", packageManager);
+                List<Path> paths = manifestFiles.stream()
+                        .map(ManifestTypeDetail::getPattern)
+                        .map((pattern) -> {
+                            try {
+                                return this.getFilesPath(pattern, directoriesToExclude, filesToExclude);
+                            }catch(IOException e){
+                                this.LOG.error("Error during manifest search");
+                                throw new UncheckedIOException(e);
+                            }
+                        })
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+
+                if (paths.size() > 0) {
+                    this.LOG.info("Files: {}", paths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
+                } else {
+                    this.LOG.info("No files found.");
+                    return;
+                }
 
 
-            try {
-                results.add(this.exec(projectId, analysisId, paths));
-            }catch(Exception ex){
-                ex.printStackTrace();
-            }
+                try {
+                    results.add(this.exec(projectId, analysisId, paths));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                this.LOG.info("--------------------------------------------------------");
 
-            this.LOG.info("--------------------------------------------------------");
+            });
 
-        });
 
         return results.stream().filter(Objects::nonNull).count();
     }
