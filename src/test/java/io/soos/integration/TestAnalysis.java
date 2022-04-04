@@ -106,4 +106,17 @@ public class TestAnalysis {
         assertEquals(0, status);
 
     }
+
+    @Test
+    public void shouldSuccedPython() throws Exception {
+        setGeneralParams();
+        System.setProperty("scp","./src/test/manifests/python");
+        System.setProperty("pn","java-core-test-python");
+        int status = SystemLambda.catchSystemExit(() -> {
+            SOOSApplication.main(new String[]{});
+        });
+
+        assertEquals(0, status);
+
+    }
 }
