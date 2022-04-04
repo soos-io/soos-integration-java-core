@@ -220,8 +220,8 @@ public class Utils {
     }
 
     public static boolean manifestFileIsValid(File pathName, String searchPattern, List<File> dirsToExclude, List<File> filesToExclude) {
-        if(searchPattern.startsWith("*")) {
-            searchPattern = ".".concat(searchPattern);
+        if(searchPattern.contains("*")) {
+            searchPattern = searchPattern.replace("*",".*");
         }
         Pattern pattern = Pattern.compile(searchPattern);
         Matcher matcher = pattern.matcher(pathName.getName());
