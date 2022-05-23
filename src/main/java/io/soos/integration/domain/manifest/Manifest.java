@@ -3,6 +3,7 @@ package io.soos.integration.domain.manifest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.soos.integration.builders.ManifestTypesURIBuilder;
 import io.soos.integration.builders.ManifestURIBuilder;
+import io.soos.integration.commons.Constants;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.Context;
 import io.soos.integration.domain.RequestParams;
@@ -20,7 +21,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Manifest {
@@ -70,52 +70,59 @@ public class Manifest {
 
 
     public long sendManifests(String projectId, String analysisId, List<File> directoriesToExclude, List<File> filesToExclude) throws Exception {
-        List<ManifestResponse> results = new ArrayList<>();
 
-            this.LOG.info("-------------------------------");
-            this.LOG.info("Begin Recursive Manifest Search");
-            this.LOG.info("-------------------------------");
+        this.LOG.info("-------------------------------");
+        this.LOG.info("Begin Recursive Manifest Search");
+        this.LOG.info("-------------------------------");
 
-            ManifestTypesResponse manifestTypes = this.getManifestTypes();
+        final List<Path> allPaths = new ArrayList<>();
+        ManifestTypesResponse manifestTypes = this.getManifestTypes();
 
-            manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
-                this.LOG.info("--------------------------------------------------------");
-                this.LOG.info("Looking for {} files...", packageManager);
-                List<Path> paths = manifestFiles.stream()
-                        .map(ManifestTypeDetail::getPattern)
-                        .map((pattern) -> {
-                            try {
-                                return this.getFilesPath(pattern, directoriesToExclude, filesToExclude);
-                            }catch(IOException e){
-                                this.LOG.error("Error during manifest search");
-                                throw new UncheckedIOException(e);
-                            }
-                        })
-                        .flatMap(List::stream)
-                        .collect(Collectors.toList());
+        manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
+            this.LOG.info("--------------------------------------------------------");
+            this.LOG.info("Looking for {} files...", packageManager);
+            List<Path> packageManagerPaths = manifestFiles.stream()
+                    .map(ManifestTypeDetail::getPattern)
+                    .map((pattern) -> {
+                        try {
+                            return this.getFilesPath(pattern, directoriesToExclude, filesToExclude);
+                        }catch(IOException e){
+                            this.LOG.error("Error during manifest search");
+                            throw new UncheckedIOException(e);
+                        }
+                    })
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
 
-                if (paths.size() > 0) {
-                    this.LOG.info("Files: {}", paths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
-                } else {
-                    this.LOG.info("No files found.");
-                    return;
-                }
+            if (packageManagerPaths.size() > 0) {
+                this.LOG.info("Files: {}", packageManagerPaths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
+                allPaths.addAll(packageManagerPaths);
+            } else {
+                this.LOG.info("No files found.");
+            }
+        });
 
+        this.LOG.info("--------------------------------------------------------");
 
-                try {
-                    results.add(this.exec(projectId, analysisId, paths));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                this.LOG.info("--------------------------------------------------------");
+        List<Path> pathsToUpload = allPaths;
 
-            });
+        try {
+            boolean hasMoreThanMaximumManifests = pathsToUpload.size() > Constants.MAX_MANIFESTS;
+            if (hasMoreThanMaximumManifests) {
+                pathsToUpload = pathsToUpload.subList(0, Constants.MAX_MANIFESTS);
+                this.LOG.info("Maximum number of manifests exceeded. Taking first {} only.", Constants.MAX_MANIFESTS);
+            }
+            if (pathsToUpload.size() > 0) {
+                this.exec(projectId, analysisId, pathsToUpload, hasMoreThanMaximumManifests);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-
-        return results.stream().filter(Objects::nonNull).count();
+        return pathsToUpload.size();
     }
 
-    private String generateManifestURL(String projectId, String analysisId) {
+    private String generateManifestURL(String projectId, String analysisId, boolean hasMoreThanMaximumManifests) {
         ManifestURIBuilder apiBuilder = new ManifestURIBuilder();
 
         return apiBuilder
@@ -123,12 +130,13 @@ public class Manifest {
                 .clientId(this.context.getClientId())
                 .projectId(projectId)
                 .analysisId(analysisId)
+                .hasMoreThanMaximumManifests(hasMoreThanMaximumManifests)
                 .buildURI();
     }
 
-    public ManifestResponse exec(String projectId, String analysisId, List<Path> manifestPaths) throws Exception {
+    public ManifestResponse exec(String projectId, String analysisId, List<Path> manifestPaths, boolean hasMoreThanMaximumManifests) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        String apiURL = this.generateManifestURL(projectId, analysisId);
+        String apiURL = this.generateManifestURL(projectId, analysisId, hasMoreThanMaximumManifests);
 
         this.LOG.info("Send Manifest URL: " + apiURL);
 

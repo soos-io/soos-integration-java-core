@@ -7,15 +7,11 @@ public class ManifestResponse {
     protected String analysisId;
 
     public ManifestResponse(LinkedHashMap response) {
-        if(response.containsKey("data")) {
-            LinkedHashMap data = (LinkedHashMap) response.get("data");
-            if(data.containsKey("projectId")) {
-                this.projectId = data.get("projectId").toString();
-            }
-
-            if(data.containsKey("analysisId")) {
-                this.analysisId = data.get("analysisId").toString();
-            }
+        if(response.containsKey("projectId")) {
+            this.projectId = response.get("projectId").toString();
+        }
+        if(response.containsKey("analysisId")) {
+            this.analysisId = response.get("analysisId").toString();
         }
     }
 
