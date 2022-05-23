@@ -1,6 +1,7 @@
 package io.soos.integration.commons;
 
 public class Constants {
+    public static final int MAX_MANIFESTS = 50;
     public static final int MIN_ANALYSIS_RESULT_POLLING_INTERVAL = 10;
     public static final int MIN_RECOMMENDED_ANALYSIS_RESULT_MAX_WAIT = 300;
 
@@ -31,6 +32,8 @@ public class Constants {
     public static final String URL_ANALYSIS_PATH = "analysis/";
     public static final String URL_SCAN_TYPES_PATH = "scan-types/";
     public static final String URL_MANIFESTS_PATH = "manifests";
+    public static final String URL_MANIFESTS_MAX_MANIFESTS_QUERY_PARAM = "hasMoreThanMaximumManifests";
+
     public static final String URL_STRUCTURE_PATH = "structure";
     public static final String URL_SCANS_PATH = "scans";
     public static final String PROPERTIES_FILE = "/project.properties";

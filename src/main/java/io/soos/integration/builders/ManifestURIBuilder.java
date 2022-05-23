@@ -8,6 +8,7 @@ public class ManifestURIBuilder extends SOOSURIBuilder implements ISOOSURIBuilde
     protected String manifestLabel;
     protected String manifestName;
     protected String targetVersion;
+    protected Boolean hasMoreThanMaximumManifests;
 
     public ManifestURIBuilder() {
         super();
@@ -57,18 +58,31 @@ public class ManifestURIBuilder extends SOOSURIBuilder implements ISOOSURIBuilde
         return this;
     }
 
+    public ManifestURIBuilder hasMoreThanMaximumManifests(Boolean hasMoreThanMaximumManifests) {
+        this.hasMoreThanMaximumManifests = hasMoreThanMaximumManifests;
+        return this;
+    }
+
     @Override
     public String buildURI() {
         StringBuilder uriBuilder = new StringBuilder();
 
-        return uriBuilder.append(super.buildURI())
+        uriBuilder.append(super.buildURI())
                 .append(Constants.URL_PROJECTS_PATH)
                 .append(this.projectId)
                 .append(Constants.URL_SLASH)
                 .append(Constants.URL_ANALYSIS_PATH)
                 .append(this.analysisId)
                 .append(Constants.URL_SLASH)
-                .append(Constants.URL_MANIFESTS_PATH)
-                .toString();
+                .append(Constants.URL_MANIFESTS_PATH);
+
+        if (hasMoreThanMaximumManifests != null) {
+            uriBuilder.append("?")
+                    .append(Constants.URL_MANIFESTS_MAX_MANIFESTS_QUERY_PARAM)
+                    .append("=")
+                    .append(hasMoreThanMaximumManifests);
+        }
+
+        return uriBuilder.toString();
     }
 }
