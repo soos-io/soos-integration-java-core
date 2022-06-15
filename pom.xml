@@ -7,6 +7,32 @@
     <groupId>io.soos</groupId>
     <artifactId>sca</artifactId>
     <version>1.0.12</version>
+    
+    <name>SOOS Integrations core</name>
+    <description>Core packages used on all our java integrations development.</description>
+    <url>https://github.com/soos-io/soos-integration-java-core</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>SOOS Integrations</name>
+            <email>integrations@soos.io</email>
+            <organization>SOOS</organization>
+            <organizationUrl>https://www.soos.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/soos-io/soos-integration-java-core.git</connection>
+        <developerConnection>scm:git:ssh://github.com:soos-io/soos-integration-java-core.git</developerConnection>
+        <url>http://github.com/soos-io/soos-integration-java-core/tree/main</url>
+    </scm>
 
     <properties>
         <commons-io.version>2.11.0</commons-io.version>
