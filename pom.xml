@@ -9,7 +9,7 @@
     <version>1.0.12</version>
     
     <name>SOOS Integrations core</name>
-    <description>Core packages used on all our java integrations development.</description>
+    <description>Core package used on all our java integrations development.</description>
     <url>https://github.com/soos-io/soos-integration-java-core</url>
 
     <licenses>
