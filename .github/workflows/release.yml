@@ -15,7 +15,7 @@ jobs:
           server-id: ossrh
           distribution: 'temurin'
           server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+          server-password: MAVEN_CENTRAL_TOKEN
           gpg-private-key: MAVEN_GPG_PRIVATE_KEY
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: build artifact
@@ -30,6 +30,6 @@ jobs:
         run: mvn --no-transfer-progress --batch-mode deploy -Dmaven.test.skip=true
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.OSSRH_PASSWORD }}
           MAVEN_GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY  }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE  }}
