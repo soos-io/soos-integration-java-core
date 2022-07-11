@@ -41,7 +41,7 @@ public class SOOS {
     }
 
     public long sendManifestFiles(String projectId, String analysisId) throws Exception {
-        return this.manifest.sendManifests(projectId, analysisId, this.script.getDirectoriesToExclude(), this.script.getFilesToExclude());
+        return this.manifest.sendManifests(projectId, analysisId, this.script.getDirectoriesToExclude(), this.script.getFilesToExclude(), this.script.getPackageManagers());
     }
 
     public ScanResponse getCreateScan() throws Exception {

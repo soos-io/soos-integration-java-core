@@ -6,6 +6,7 @@ import io.soos.integration.builders.ManifestURIBuilder;
 import io.soos.integration.commons.Constants;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.Context;
+import io.soos.integration.domain.PackageManagers;
 import io.soos.integration.domain.RequestParams;
 import io.soos.integration.domain.RequestParamsManifest;
 import org.apache.commons.lang3.StringUtils;
@@ -69,7 +70,7 @@ public class Manifest {
     }
 
 
-    public long sendManifests(String projectId, String analysisId, List<File> directoriesToExclude, List<File> filesToExclude) throws Exception {
+    public long sendManifests(String projectId, String analysisId, List<File> directoriesToExclude, List<File> filesToExclude, List<PackageManagers> packageManagers) throws Exception {
 
         this.LOG.info("-------------------------------");
         this.LOG.info("Begin Recursive Manifest Search");
@@ -79,6 +80,9 @@ public class Manifest {
         ManifestTypesResponse manifestTypes = this.getManifestTypes();
 
         manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
+            if(packageManagers != null && packageManagers.stream().filter(e -> e.name().equalsIgnoreCase(packageManager)).findAny().orElse(null) == null){
+                return;
+            }
             this.LOG.info("--------------------------------------------------------");
             this.LOG.info("Looking for {} files...", packageManager);
             List<Path> packageManagerPaths = manifestFiles.stream()

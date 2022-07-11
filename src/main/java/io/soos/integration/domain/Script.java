@@ -22,6 +22,7 @@ public class Script {
     protected File workspaceDirectory;
     protected int analysisResultMaxWait;
     protected int analysisResultPoolingInterval;
+    protected List<PackageManagers> packageManagers;
 
     private final Map<String, String> params;
 
@@ -40,7 +41,22 @@ public class Script {
         this.setWorkspaceDirectory();
         this.setAnalysisResultMaxWait();
         this.setAnalysisResultPoolingInterval();
+        this.setPackageManagers();
+    }
 
+    public void setPackageManagers() {
+        String packageManagers = this.params.get(Constants.MAP_PARAM_PACKAGE_MANAGERS_KEY);
+        this.packageManagers = new ArrayList<>();
+        if(StringUtils.isNoneEmpty(packageManagers)){
+            List<String> packageManagersList = new ArrayList<>();
+            packageManagersList.addAll(Arrays.stream(packageManagers.split(",")).map(String::trim).collect(Collectors.toList()));
+            for(String packageManager:packageManagersList){
+                this.packageManagers.add(Arrays.stream(PackageManagers.values())
+                        .filter(e -> e.name().equalsIgnoreCase(packageManager)).findAny().orElse(null));
+            }
+        }else{
+            this.packageManagers = null;
+        }
     }
 
     private void setMode() {
@@ -148,4 +164,6 @@ public class Script {
     public int getAnalysisResultPoolingInterval() {
         return analysisResultPoolingInterval;
     }
+
+    public List<PackageManagers> getPackageManagers() { return packageManagers; }
 }

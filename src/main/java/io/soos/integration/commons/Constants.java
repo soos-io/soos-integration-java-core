@@ -85,6 +85,7 @@ public class Constants {
     public static final String PARAM_BUILD_URI_KEY = "blduri";
     public static final String PARAM_OPERATING_ENVIRONMENT_KEY = "oe";
     public static final String PARAM_INTEGRATION_NAME_KEY = "intn";
+    public static final String PARAM_PACKAGE_MANAGERS_KEY = "pkgm";
 
     public static final String MAP_PARAM_CLIENT_ID_KEY = "clientId";
     public static final String MAP_PARAM_API_KEY = "apiKey";
@@ -105,6 +106,7 @@ public class Constants {
     public static final String MAP_PARAM_BUILD_URI_KEY = "buildURI";
     public static final String MAP_PARAM_OPERATING_ENVIRONMENT_KEY = "operatingEnvironment";
     public static final String MAP_PARAM_INTEGRATION_NAME_KEY = "integrationName";
+    public static final String MAP_PARAM_PACKAGE_MANAGERS_KEY = "packageManagaers";
 
     // Report Status
     public static final String REPORT_STATUS_FINISHED = "Finished";
