@@ -186,6 +186,7 @@ public class Utils {
         params.put(Constants.MAP_PARAM_BUILD_URI_KEY, System.getProperty(Constants.PARAM_BUILD_URI_KEY));
         params.put(Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY, System.getProperty(Constants.PARAM_OPERATING_ENVIRONMENT_KEY));
         params.put(Constants.MAP_PARAM_INTEGRATION_NAME_KEY, System.getProperty(Constants.PARAM_INTEGRATION_NAME_KEY));
+        params.put(Constants.MAP_PARAM_PACKAGE_MANAGERS_KEY, System.getProperty(Constants.PARAM_PACKAGE_MANAGERS_KEY));
 
         return params;
     }
