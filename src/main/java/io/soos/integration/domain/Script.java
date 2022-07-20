@@ -47,7 +47,7 @@ public class Script {
     public void setPackageManagers() {
         String packageManagers = this.params.get(Constants.MAP_PARAM_PACKAGE_MANAGERS_KEY);
         this.packageManagers = new ArrayList<>();
-        if(StringUtils.isNoneEmpty(packageManagers)){
+        if(packageManagers != null && !packageManagers.equals("") ){
             List<String> packageManagersList = new ArrayList<>();
             packageManagersList.addAll(Arrays.stream(packageManagers.split(",")).map(String::trim).collect(Collectors.toList()));
             for(String packageManager:packageManagersList){
