@@ -80,7 +80,7 @@ public class Manifest {
         ManifestTypesResponse manifestTypes = this.getManifestTypes();
 
         manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
-            if(packageManagers != null && packageManagers.stream().filter(e -> e.name().equalsIgnoreCase(packageManager)).findAny().orElse(null) == null){
+            if(packageManagers != null && packageManagers.size() > 0 && packageManagers.stream().filter(e -> e.name().equalsIgnoreCase(packageManager)).findAny().orElse(null) == null){
                 return;
             }
             this.LOG.info("--------------------------------------------------------");
