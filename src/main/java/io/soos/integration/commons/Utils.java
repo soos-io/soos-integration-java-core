@@ -224,8 +224,8 @@ public class Utils {
         if(searchPattern.contains("*")) {
             searchPattern = searchPattern.replace("*",".*");
         }
-        Pattern pattern = Pattern.compile(searchPattern);
-        Matcher matcher = pattern.matcher(pathName.getName());
+        Pattern pattern = Pattern.compile(searchPattern.toLowerCase());
+        Matcher matcher = pattern.matcher(pathName.getName().toLowerCase());
         return !dirsToExclude.contains(pathName.getParentFile()) &&
                 !filesToExclude.contains(pathName) &&
                 matcher.find();
