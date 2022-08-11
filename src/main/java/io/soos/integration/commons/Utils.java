@@ -120,16 +120,16 @@ public class Utils {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost post = new HttpPost(requestParams.getUrl());
         post.addHeader(Constants.API_HEADER_KEY_NAME, requestParams.getApiKey());
-
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        String checkoutDir = System.getProperty(Constants.PARAM_CHECKOUT_DIR_KEY);
         List<File> files = requestParams.getFiles().stream().map(Path::toFile).collect(Collectors.toList());
         for( int i = 0; i < files.size(); i++) {
             String suffix = i > 0 ? String.valueOf(i) : "";
-            String[] splittedPath = files.get(i).getPath().split(Pattern.quote(File.separator));
+            String[] splittedPath = Arrays.stream(files.get(i).getPath().replace(checkoutDir, "").split(Pattern.quote(File.separator))).filter(value -> value != null && !value.equals("")).toArray(String[]::new);
             String label = "";
             if(splittedPath.length >= 2) {
-                label = splittedPath[splittedPath.length - 2];
+                label = String.join(File.separator, Arrays.copyOfRange(splittedPath, 0, splittedPath.length - 1));
             }
             builder.addBinaryBody("file"+suffix, files.get(i));
             builder.addTextBody("parentFolder"+suffix, label);
