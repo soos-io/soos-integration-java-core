@@ -226,8 +226,12 @@ public class Utils {
         }
         Pattern pattern = Pattern.compile(searchPattern.toLowerCase());
         Matcher matcher = pattern.matcher(pathName.getName().toLowerCase());
-        return !dirsToExclude.contains(pathName.getParentFile()) &&
-                !filesToExclude.contains(pathName) &&
+        String checkoutDir = System.getProperty(Constants.PARAM_CHECKOUT_DIR_KEY);
+        String relativeFilePath = pathName.getAbsolutePath().replace(checkoutDir, "");
+        boolean isInDirsToExclude = dirsToExclude.stream().anyMatch(file -> Arrays.asList(relativeFilePath.split(Pattern.quote(File.separator))).contains(file.getPath()));
+        boolean isFileToExclude = filesToExclude.stream().anyMatch(file -> file.getName().toLowerCase().contains(pathName.getName().toLowerCase()));
+        return !isInDirsToExclude &&
+                !isFileToExclude &&
                 matcher.find();
     }
 
