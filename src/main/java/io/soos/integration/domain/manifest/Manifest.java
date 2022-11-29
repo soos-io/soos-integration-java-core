@@ -19,9 +19,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Manifest {
@@ -76,7 +74,7 @@ public class Manifest {
         this.LOG.info("Begin Recursive Manifest Search");
         this.LOG.info("-------------------------------");
 
-        final List<Path> allPaths = new ArrayList<>();
+        final Map<String, List<Path>> allPaths = new HashMap<String, List<Path>>();
         ManifestTypesResponse manifestTypes = this.getManifestTypes();
 
         manifestTypes.getManifests().forEach((packageManager, manifestFiles) -> {
@@ -100,30 +98,38 @@ public class Manifest {
 
             if (packageManagerPaths.size() > 0) {
                 this.LOG.info("Files: {}", packageManagerPaths.stream().map(path -> path.getFileName().toString()).collect(Collectors.toList()));
-                allPaths.addAll(packageManagerPaths);
+                allPaths.merge(packageManager, packageManagerPaths, (oldValue, newValue) -> {
+                    oldValue.addAll(newValue);
+                    return oldValue;
+                });
             } else {
                 this.LOG.info("No files found.");
             }
         });
 
         this.LOG.info("--------------------------------------------------------");
-
-        List<Path> pathsToUpload = allPaths;
-
-        try {
-            boolean hasMoreThanMaximumManifests = pathsToUpload.size() > Constants.MAX_MANIFESTS;
-            if (hasMoreThanMaximumManifests) {
-                pathsToUpload = pathsToUpload.subList(0, Constants.MAX_MANIFESTS);
-                this.LOG.info("Maximum number of manifests exceeded. Taking first {} only.", Constants.MAX_MANIFESTS);
+        // do request for every packagemanager on allpaths
+        int totalManifests = 0;
+        for (Map.Entry<String, List<Path>> entry : allPaths.entrySet()) {
+            String packageManager = entry.getKey();
+            List<Path> pathsToUpload = entry.getValue();
+            this.LOG.info("Uploading {} {} manifests...", pathsToUpload.size(), packageManager);
+            totalManifests += pathsToUpload.size();
+            try {
+                boolean hasMoreThanMaximumManifests = pathsToUpload.size() > Constants.MAX_MANIFESTS;
+                if (hasMoreThanMaximumManifests) {
+                    pathsToUpload = pathsToUpload.subList(0, Constants.MAX_MANIFESTS);
+                    this.LOG.info("Maximum number of manifests exceeded. Taking first {} only.", Constants.MAX_MANIFESTS);
+                }
+                if (pathsToUpload.size() > 0) {
+                    this.exec(projectId, analysisId, pathsToUpload, hasMoreThanMaximumManifests);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            if (pathsToUpload.size() > 0) {
-                this.exec(projectId, analysisId, pathsToUpload, hasMoreThanMaximumManifests);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        return pathsToUpload.size();
+        return totalManifests;
     }
 
     private String generateManifestURL(String projectId, String analysisId, boolean hasMoreThanMaximumManifests) {
