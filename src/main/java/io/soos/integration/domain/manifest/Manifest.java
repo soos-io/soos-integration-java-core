@@ -108,16 +108,18 @@ public class Manifest {
         });
 
         this.LOG.info("--------------------------------------------------------");
-        // do request for every packagemanager on allpaths
         int totalManifests = 0;
         for (Map.Entry<String, List<Path>> entry : allPaths.entrySet()) {
+            if(totalManifests == Constants.MAX_MANIFESTS){
+                this.LOG.info("Maximum number of manifests reached ({}). Skipping remaining manifests.", Constants.MAX_MANIFESTS);
+                break;
+            }
             String packageManager = entry.getKey();
             List<Path> pathsToUpload = entry.getValue();
             totalManifests += pathsToUpload.size();
             try {
                 boolean hasMoreThanMaximumManifests = totalManifests > Constants.MAX_MANIFESTS;
                 if (hasMoreThanMaximumManifests) {
-                    // do a sublist of the paths to upload
                     pathsToUpload = pathsToUpload.subList(0, Constants.MAX_MANIFESTS - (totalManifests - pathsToUpload.size()));
                     this.LOG.info("Maximum number of manifests exceeded ({}). Taking first {} only.", Constants.MAX_MANIFESTS, pathsToUpload.size());
                 }
