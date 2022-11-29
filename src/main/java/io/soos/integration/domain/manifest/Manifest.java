@@ -113,23 +113,28 @@ public class Manifest {
         for (Map.Entry<String, List<Path>> entry : allPaths.entrySet()) {
             String packageManager = entry.getKey();
             List<Path> pathsToUpload = entry.getValue();
-            this.LOG.info("Uploading {} {} manifests...", pathsToUpload.size(), packageManager);
             totalManifests += pathsToUpload.size();
             try {
-                boolean hasMoreThanMaximumManifests = pathsToUpload.size() > Constants.MAX_MANIFESTS;
+                boolean hasMoreThanMaximumManifests = totalManifests > Constants.MAX_MANIFESTS;
                 if (hasMoreThanMaximumManifests) {
-                    pathsToUpload = pathsToUpload.subList(0, Constants.MAX_MANIFESTS);
-                    this.LOG.info("Maximum number of manifests exceeded. Taking first {} only.", Constants.MAX_MANIFESTS);
+                    // do a sublist of the paths to upload
+                    pathsToUpload = pathsToUpload.subList(0, Constants.MAX_MANIFESTS - (totalManifests - pathsToUpload.size()));
+                    this.LOG.info("Maximum number of manifests exceeded ({}). Taking first {} only.", Constants.MAX_MANIFESTS, pathsToUpload.size());
                 }
                 if (pathsToUpload.size() > 0) {
+                    this.LOG.info("Uploading {} {} manifests...", pathsToUpload.size(), packageManager);
                     this.exec(projectId, analysisId, pathsToUpload, hasMoreThanMaximumManifests);
+                }
+                if(hasMoreThanMaximumManifests){
+                    // break the loop since max manifest has been reached
+                    break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        return totalManifests;
+        return Math.min(totalManifests, Constants.MAX_MANIFESTS);
     }
 
     private String generateManifestURL(String projectId, String analysisId, boolean hasMoreThanMaximumManifests) {
