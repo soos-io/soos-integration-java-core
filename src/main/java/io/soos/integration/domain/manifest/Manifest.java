@@ -121,7 +121,7 @@ public class Manifest {
                 boolean hasMoreThanMaximumManifests = totalManifests > Constants.MAX_MANIFESTS;
                 if (hasMoreThanMaximumManifests) {
                     pathsToUpload = pathsToUpload.subList(0, Constants.MAX_MANIFESTS - (totalManifests - pathsToUpload.size()));
-                    this.LOG.info("Maximum number of manifests exceeded ({}). Taking first {} only.", Constants.MAX_MANIFESTS, pathsToUpload.size());
+                    this.LOG.info("Maximum number of manifests reached ({}). Skipping remaining manifests.", Constants.MAX_MANIFESTS)
                 }
                 if (pathsToUpload.size() > 0) {
                     this.LOG.info("Uploading {} {} manifests...", pathsToUpload.size(), packageManager);
