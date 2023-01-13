@@ -1,20 +1,15 @@
-# SOOS SCA: Java
-## OSS Security for Everyone
-The **SOOS SCA Java Library** is the most flexible way to run **SOOS** against your codebase to gain insights into your open source package risk. Run **locally** or on a **CI/CD
-server**, using either synchronous or asynchronous mode.
+# [SOOS Core SCA Java Library](https://soos.io/sca-product)
 
-## Supported Languages and Package Managers
+<img src="assets/SOOS_logo.png" style="margin-bottom: 10px;" width="350" alt="SOOS Icon">
 
-*	[Node (NPM)](https://www.npmjs.com/)
-*	[Python (pypi)](https://pypi.org/)
-*	[.NET (NuGet)](https://www.nuget.org/)
-*	[Ruby (Ruby Gems)](https://rubygems.org/)
-*	[Java (Maven)](https://maven.apache.org/)
+SOOS is an independent software security company, located in Winooski, VT USA, building security software for your team. [SOOS, Software security, simplified](https://soos.io).
 
-Our full list of supported manifest formats can be found [here](https://kb.soos.io/help/soos-languages-supported).
+Use SOOS to scan your software for [vulnerabilities](https://app.soos.io/research/vulnerabilities) and [open source license](https://app.soos.io/research/licenses) issues with [SOOS Core SCA](https://soos.io/sca-product). [Generate SBOMs](https://kb.soos.io/help/generating-a-software-bill-of-materials-sbom). Govern your open source dependencies. Run the [SOOS DAST vulnerability scanner](https://soos.io/dast-product) against your web apps or APIs.
 
-## Need an Account?
-**Visit [soos.io](https://app.soos.io/register) to create your trial account.**
+[Demo SOOS](https://app.soos.io/demo) or [Register for a Free Trial](https://app.soos.io/register).
+
+If you maintain an Open Source project, sign up for the Free as in Beer [SOOS Community Edition](https://soos.io/products/community-edition).
+
 
 ## Development
 ### Requirements
