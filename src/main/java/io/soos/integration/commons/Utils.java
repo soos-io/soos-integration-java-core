@@ -169,7 +169,6 @@ public class Utils {
 
         params.put(Constants.MAP_PARAM_CLIENT_ID_KEY, System.getProperty(Constants.SOOS_CLIENT_ID));
         params.put(Constants.MAP_PARAM_API_KEY, System.getProperty(Constants.SOOS_API_KEY));
-        params.put(Constants.MAP_PARAM_MODE_KEY, System.getProperty(Constants.PARAM_MODE_KEY));
         params.put(Constants.MAP_PARAM_ON_FAILURE_KEY, System.getProperty(Constants.PARAM_ON_FAILURE_KEY));
         params.put(Constants.MAP_PARAM_DIRS_TO_EXCLUDE_KEY, System.getProperty(Constants.PARAM_DIRS_TO_EXCLUDE_KEY));
         params.put(Constants.MAP_PARAM_FILES_TO_EXCLUDE_KEY, System.getProperty(Constants.PARAM_FILES_TO_EXCLUDE_KEY));
@@ -194,7 +193,6 @@ public class Utils {
     public static Map<String, String> parseEnvVariables() {
         HashMap<String, String> envVariables = new HashMap<>();
 
-        envVariables.put(Constants.MAP_PARAM_MODE_KEY, System.getenv(Constants.SOOS_MODE));
         envVariables.put(Constants.MAP_PARAM_ON_FAILURE_KEY, System.getenv(Constants.SOOS_ON_FAILURE));
         envVariables.put(Constants.MAP_PARAM_DIRS_TO_EXCLUDE_KEY, System.getenv(Constants.SOOS_DIRS_TO_EXCLUDE));
         envVariables.put(Constants.MAP_PARAM_FILES_TO_EXCLUDE_KEY, System.getenv(Constants.SOOS_FILES_TO_EXCLUDE));

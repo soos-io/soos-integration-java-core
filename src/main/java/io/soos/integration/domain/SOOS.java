@@ -77,9 +77,6 @@ public class SOOS {
         return this.analysisResult.execute(reportStatusURL);
     }
 
-    public Mode getMode() {
-        return this.script.getMode();
-    }
 
     public OnFailure getOnFailure() {
         return this.script.getOnFailure();
