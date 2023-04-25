@@ -219,7 +219,7 @@ public class Utils {
     }
 
     public static boolean manifestFileIsValid(File pathName, String searchPattern, List<File> dirsToExclude, List<File> filesToExclude) {
-        searchPattern = searchPattern.replace("*",".*");
+        searchPattern = searchPattern.replace("*", ".*");
         Pattern pattern = Pattern.compile(Pattern.quote(searchPattern), Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(pathName.getName());
         String checkoutDir = System.getProperty(Constants.PARAM_CHECKOUT_DIR_KEY);
