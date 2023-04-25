@@ -12,55 +12,22 @@ public class SOOSApplication {
 
     public static void main(String[] args) {
         try {
-
             SOOS soos = new SOOS();
             ScanResponse scan = null;
             AnalysisResultResponse result = null;
             LOG.info("--------------------------------------------");
-            switch (soos.getMode()) {
-                case RUN_AND_WAIT:
-                    LOG.info("Run and Wait Scan");
-                    LOG.info("--------------------------------------------");
-                    scan = soos.startAnalysis();
-                    LOG.info("Analysis request is running");
-                    result = soos.getResults(scan.getScanStatusUrl());
-                    if(Utils.shouldFaildBuild(soos.getOnFailure(), result.getStatus())){
-                        LOG.info("Scan failed with status {}", result.getStatus());
-                        LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
-                        System.exit(0);
-                    }
-                    LOG.info("Scan analysis finished with status {}. To see the results go to: {}", result.getStatus(), result.getScanUrl());
-                    LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
-                    break;
-                case ASYNC_INIT:
-                    LOG.info("Async Init Scan");
-                    LOG.info("--------------------------------------------");
-                    scan = soos.startAnalysis();
-                    LOG.info("Analysis request is running, access the report status using this link: {}", scan.getScanStatusUrl());
-                    if(Utils.shouldFaildBuild(soos.getOnFailure(), result.getStatus())){
-                        LOG.info("Scan failed with status {}", result.getStatus());
-                        LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
-                        System.exit(0);
-                    }
-                    LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
-                    break;
-                case ASYNC_RESULT:
-                    LOG.info("Async Result Scan");
-                    LOG.info("--------------------------------------------");
-                    String reportStatusUrl = args[0];
-                    LOG.info("Checking Scan Status from: {}", reportStatusUrl);
-                    result = soos.getResults(reportStatusUrl);
-                    if(Utils.shouldFaildBuild(soos.getOnFailure(), result.getStatus())){
-                        LOG.info("Scan failed with status {}", result.getStatus());
-                        LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
-                        System.exit(0);
-                    }
-                    LOG.info("Scan analysis finished successfully. To see the results go to: {}", result.getScanUrl());
-                    LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
-                    break;
-                default:
-                    throw new Exception("Invalid SCA Mode");
+            LOG.info("Run and Wait SOOS Scan");
+            LOG.info("--------------------------------------------");
+            scan = soos.startAnalysis();
+            LOG.info("Analysis request is running");
+            result = soos.getResults(scan.getScanStatusUrl());
+            if(Utils.shouldFaildBuild(soos.getOnFailure(), result.getStatus())){
+                LOG.info("Scan failed with status {}", result.getStatus());
+                LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
+                System.exit(0);
             }
+            LOG.info("Scan analysis finished with status {}. To see the results go to: {}", result.getStatus(), result.getScanUrl());
+            LOG.info("Vulnerabilities: {}, Violations: {}", result.getVulnerabilities(), result.getViolations());
             System.exit(0);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);

@@ -249,15 +249,15 @@ public class Context {
     public boolean load() {
         this.loadFromEnvVariables();
 
-        if (!ContextValidator.validate(this)) {
-            this.loadFromArgs();
-
-            return ContextValidator.validate(this);
+        if (ContextValidator.validate(this)) {
+            return true;
         }
 
-        return true;
+        this.loadFromArgs();
 
+        return ContextValidator.validate(this);
     }
+
 
     private String getVersionFromProperties(String version) {
 
@@ -269,8 +269,7 @@ public class Context {
         try {
             prop.load(this.getClass().getResourceAsStream(Constants.PROPERTIES_FILE));
         } catch (IOException e) {
-            StringBuilder error = new StringBuilder("Cannot read file ").append("'").append(Constants.PROPERTIES_FILE).append("'");
-            LOG.error(error.toString(), e);
+            LOG.error("Cannot read file '{}'", Constants.PROPERTIES_FILE, e);
         }
         return prop.getProperty(Constants.VERSION);
     }

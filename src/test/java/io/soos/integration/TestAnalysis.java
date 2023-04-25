@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 public class TestAnalysis {
 
     void setGeneralParams(){
-        System.setProperty("m","run_and_wait");
         System.setProperty("of","fail_the_build");
         System.setProperty("armw","50");
         System.setProperty("arpi","5");

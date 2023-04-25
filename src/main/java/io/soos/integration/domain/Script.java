@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 public class Script {
     protected File codeRoot;
     protected File asyncResult;
-    protected Mode mode;
     protected OnFailure onFailure;
     protected List<File> directoriesToExclude;
     protected List<File> filesToExclude;
@@ -34,7 +33,6 @@ public class Script {
     }
 
     public void load() {
-        this.setMode();
         this.setOnFailure();
         this.setDirectoriesToExclude();
         this.setFilesToExclude();
@@ -47,7 +45,7 @@ public class Script {
     public void setPackageManagers() {
         String packageManagers = this.params.get(Constants.MAP_PARAM_PACKAGE_MANAGERS_KEY);
         this.packageManagers = new ArrayList<>();
-        if(packageManagers != null && !packageManagers.equals("") ){
+        if(StringUtils.isNotBlank(packageManagers)){
             List<String> packageManagersList = new ArrayList<>();
             packageManagersList.addAll(Arrays.stream(packageManagers.split(",")).map(String::trim).collect(Collectors.toList()));
             for(String packageManager:packageManagersList){
@@ -56,21 +54,6 @@ public class Script {
             }
         }else{
             this.packageManagers = null;
-        }
-    }
-
-    private void setMode() {
-        String mode = this.params.get(Constants.MAP_PARAM_MODE_KEY);
-        switch (mode) {
-            case "async_init":
-                this.mode = Mode.ASYNC_INIT;
-                break;
-            case "async_result":
-                this.mode = Mode.ASYNC_RESULT;
-                break;
-            default:
-                this.mode = Mode.RUN_AND_WAIT;
-                break;
         }
     }
 
@@ -135,10 +118,6 @@ public class Script {
 
     public File getAsyncResult() {
         return asyncResult;
-    }
-
-    public Mode getMode() {
-        return mode;
     }
 
     public OnFailure getOnFailure() {

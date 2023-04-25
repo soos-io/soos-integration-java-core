@@ -52,7 +52,6 @@ public class Constants {
     public static final String SOOS_PROJECT_NAME = "SOOS_PROJECT_NAME";
     public static final String SOOS_CLIENT_ID = "SOOS_CLIENT_ID";
     public static final String SOOS_API_KEY = "SOOS_API_KEY";
-    public static final String SOOS_MODE = "SOOS_MODE";
     public static final String SOOS_ON_FAILURE = "SOOS_ON_FAILURE";
     public static final String SOOS_DIRS_TO_EXCLUDE = "SOOS_DIRS_TO_EXCLUDE";
     public static final String SOOS_FILES_TO_EXCLUDE = "SOOS_FILES_TO_EXCLUDE";
@@ -68,7 +67,6 @@ public class Constants {
     public static final String SOOS_INTEGRATION_NAME = "SOOS_INTEGRATION_NAME";
 
     // Params Arguments
-    public static final String PARAM_MODE_KEY = "m";
     public static final String PARAM_ON_FAILURE_KEY = "of";
     public static final String PARAM_DIRS_TO_EXCLUDE_KEY = "dte";
     public static final String PARAM_FILES_TO_EXCLUDE_KEY = "fte";
@@ -89,7 +87,6 @@ public class Constants {
 
     public static final String MAP_PARAM_CLIENT_ID_KEY = "clientId";
     public static final String MAP_PARAM_API_KEY = "apiKey";
-    public static final String MAP_PARAM_MODE_KEY = "mode";
     public static final String MAP_PARAM_ON_FAILURE_KEY = "onFailure";
     public static final String MAP_PARAM_DIRS_TO_EXCLUDE_KEY = "dirsToExclude";
     public static final String MAP_PARAM_FILES_TO_EXCLUDE_KEY = "filesToExclude";

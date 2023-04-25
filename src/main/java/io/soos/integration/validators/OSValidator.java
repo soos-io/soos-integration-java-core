@@ -1,7 +1,7 @@
 package io.soos.integration.validators;
 
 public class OSValidator {
-    private static final String OS = System.getProperty("os.name").toLowerCase();
+    private static final String OS = System.getProperty("os.name", "");
 
     public static boolean isWindows() {
         return (OS.contains("win"));
