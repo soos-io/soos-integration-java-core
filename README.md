@@ -28,10 +28,10 @@ Set environment variables SOOS_API_KEY and SOOS_CLIENT_ID
 
 Command Prompt
 ```bash
-java -jar -Dm=run_and_wait -Dof=fail_the_build -Ddte=soos -Dfte= -Dwd=./ -Darmw=300 -Darpi=10 -Dburi=https://api.soos.io/api/ -Dscp=./ -Dpn="Java Test" soos/soos-sca.jar
+java -jar -Dof=fail_the_build -Ddte=soos -Dfte= -Dwd=./ -Darmw=300 -Darpi=10 -Dburi=https://api.soos.io/api/ -Dscp=./ -Dpn="Java Test" soos/soos-sca.jar
 ```
 
 Powershell
 ```bash
-java -jar "-Dm=run_and_wait" "-Dof=fail_the_build" "-Ddte=soos" "-Dfte=" "-Dwd=./" "-Darmw=300" "-Darpi=10" "-Dburi=https://api.soos.io/api/" "-Dscp=./" "-Dpn=test" .\soos\soos-sca.jar
+java -jar "-Dof=fail_the_build" "-Ddte=soos" "-Dfte=" "-Dwd=./" "-Darmw=300" "-Darpi=10" "-Dburi=https://api.soos.io/api/" "-Dscp=./" "-Dpn=test" .\soos\soos-sca.jar
 ```
