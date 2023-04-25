@@ -62,9 +62,12 @@ public class Manifest {
         }
 
         List<Path> paths = new ArrayList<>();
-        Files.find(Paths.get(codeRoot), Integer.MAX_VALUE,(filepath, fileattr) -> fileattr.isRegularFile()).forEach(p -> paths.add(p));
+        Files.find(Paths.get(codeRoot), Integer.MAX_VALUE, (filepath, fileattr) -> fileattr.isRegularFile())
+                .forEach(paths::add);
 
-        return paths.stream().filter(f -> Utils.manifestFileIsValid(f.toFile(), pattern, directoriesToExclude, filesToExclude)).collect(Collectors.toList());
+        return paths.stream()
+                .filter(f -> Utils.manifestFileIsValid(f.toFile(), pattern, directoriesToExclude, filesToExclude))
+                .collect(Collectors.toList());
     }
 
 
