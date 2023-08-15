@@ -2,14 +2,12 @@ package io.soos.integration.domain.scan;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.soos.integration.builders.CreateScanURIBuilder;
-import io.soos.integration.builders.StructureURIBuilder;
 import io.soos.integration.commons.Utils;
 import io.soos.integration.domain.Context;
 import io.soos.integration.domain.RequestParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
@@ -28,6 +29,9 @@ public class Context {
     protected String integrationName;
     protected String integrationType;
     protected String scriptVersion;
+    protected String contributingDeveloper;
+    protected String contributingDeveloperEnv;
+    protected ArrayList<ContributingDeveloperAudit> contributingDeveloperAudit;
     protected int analysisResultMaxWait;
     protected int analysisResultPoolInterval;
 
@@ -168,6 +172,8 @@ public class Context {
         this.scriptVersion = scriptVersion;
     }
 
+    public ArrayList<ContributingDeveloperAudit> getContributingDeveloperAudit() { return contributingDeveloperAudit; }
+
     private void reset() {
         this.baseURI = Constants.SOOS_DEFAULT_API_URL;
         this.sourceCodePath = null;
@@ -226,7 +232,18 @@ public class Context {
         this.integrationName = this.loadProperty(this.integrationName, Constants.MAP_PARAM_INTEGRATION_NAME_KEY);
         this.analysisResultMaxWait = this.loadIntProperty(this.analysisResultMaxWait, Constants.MAP_PARAM_ANALYSIS_RESULT_MAX_WAIT_KEY);
         this.analysisResultPoolInterval = this.loadIntProperty(this.analysisResultPoolInterval, Constants.MAP_PARAM_ANALYSIS_RESULT_POLLING_INTERVAL_KEY);
+        this.contributingDeveloper = this.loadProperty(this.contributingDeveloper, Constants.MAP_PARAM_CONTRIBUTING_DEVELOPER_KEY);
+        this.contributingDeveloperEnv = this.loadProperty(this.contributingDeveloperEnv, Constants.MAP_PARAM_CONTRIBUTING_DEVELOPER_ENV_KEY);
+
+        if (StringUtils.isNotBlank(this.contributingDeveloper) && StringUtils.isNotBlank(this.contributingDeveloperEnv)) {
+            if (this.contributingDeveloperAudit == null) {
+                this.contributingDeveloperAudit = new ArrayList<>();
+            }
+            ContributingDeveloperAudit audit = new ContributingDeveloperAudit("EnvironmentVariable", this.contributingDeveloperEnv, this.contributingDeveloper);
+            this.contributingDeveloperAudit.add(audit);
+        }
     }
+
 
     private String loadProperty(String property, String paramMapKey) {
         String paramValue = this.params.get(paramMapKey);
