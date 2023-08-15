@@ -1,10 +1,12 @@
 package io.soos.integration.domain.scan;
 
 import io.soos.integration.domain.Context;
+import io.soos.integration.domain.ContributingDeveloperAudit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ScanAPIRequestBody {
@@ -21,6 +23,7 @@ public class ScanAPIRequestBody {
     private String integrationName;
     private String scriptVersion;
     private String toolName;
+    private ArrayList<ContributingDeveloperAudit> contributingDeveloperAudit;
 
 
     public ScanAPIRequestBody(Context context) {
@@ -32,6 +35,7 @@ public class ScanAPIRequestBody {
         this.projectName = context.getProjectName();
         this.integrationType = context.getIntegrationType();
         this.scriptVersion = context.getScriptVersion();
+        this.integrationName = context.getIntegrationName();
         this.initialize(context);
     }
 
@@ -65,6 +69,10 @@ public class ScanAPIRequestBody {
 
         if(StringUtils.isNotEmpty(context.getIntegrationName())) {
             this.setIntegrationName(context.getIntegrationName());
+        }
+
+        if(context.getContributingDeveloperAudit() != null) {
+            this.setContributingDeveloperAudit(context.getContributingDeveloperAudit());
         }
     }
 
@@ -170,6 +178,14 @@ public class ScanAPIRequestBody {
         this.toolName = toolName;
     }
 
+    public ArrayList<ContributingDeveloperAudit> getContributingDeveloperAudit() {
+        return contributingDeveloperAudit;
+    }
+
+    public void setContributingDeveloperAudit (ArrayList<ContributingDeveloperAudit> contributingDeveloperAudit) {
+        this.contributingDeveloperAudit = contributingDeveloperAudit;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -186,6 +202,7 @@ public class ScanAPIRequestBody {
                 .append("integrationName", integrationName)
                 .append("scriptVersion", scriptVersion)
                 .append("toolName", toolName)
+                .append("contributingDeveloperAudit", contributingDeveloperAudit)
                 .toString();
     }
 }

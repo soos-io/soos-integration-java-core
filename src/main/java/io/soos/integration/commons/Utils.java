@@ -186,6 +186,8 @@ public class Utils {
         params.put(Constants.MAP_PARAM_OPERATING_ENVIRONMENT_KEY, System.getProperty(Constants.PARAM_OPERATING_ENVIRONMENT_KEY));
         params.put(Constants.MAP_PARAM_INTEGRATION_NAME_KEY, System.getProperty(Constants.PARAM_INTEGRATION_NAME_KEY));
         params.put(Constants.MAP_PARAM_PACKAGE_MANAGERS_KEY, System.getProperty(Constants.PARAM_PACKAGE_MANAGERS_KEY));
+        params.put(Constants.MAP_PARAM_CONTRIBUTING_DEVELOPER_KEY, System.getProperty(Constants.PARAM_CONTRIBUTING_DEVELOPER_KEY));
+        params.put(Constants.MAP_PARAM_CONTRIBUTING_DEVELOPER_ENV_KEY, System.getProperty(Constants.PARAM_CONTRIBUTING_DEVELOPER_ENV_KEY));
 
         return params;
     }
@@ -210,6 +212,8 @@ public class Utils {
         envVariables.put(Constants.MAP_PARAM_INTEGRATION_NAME_KEY, System.getenv(Constants.SOOS_INTEGRATION_NAME));
         envVariables.put(Constants.MAP_PARAM_CLIENT_ID_KEY, System.getenv(Constants.SOOS_CLIENT_ID));
         envVariables.put(Constants.MAP_PARAM_API_KEY, System.getenv(Constants.SOOS_API_KEY));
+        envVariables.put(Constants.MAP_PARAM_CONTRIBUTING_DEVELOPER_KEY, System.getenv(Constants.SOOS_CONTRIBUTING_DEVELOPER));
+        envVariables.put(Constants.MAP_PARAM_CONTRIBUTING_DEVELOPER_ENV_KEY, System.getenv(Constants.SOOS_CONTRIBUTING_DEVELOPER_ENV));
 
         return envVariables;
     }

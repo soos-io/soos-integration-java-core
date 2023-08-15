@@ -65,6 +65,8 @@ public class Constants {
     public static final String SOOS_BUILD_URI = "SOOS_BUILD_URI";
     public static final String SOOS_OPERATING_ENVIRONMENT = "SOOS_OPERATING_ENVIRONMENT";
     public static final String SOOS_INTEGRATION_NAME = "SOOS_INTEGRATION_NAME";
+    public static final String SOOS_CONTRIBUTING_DEVELOPER = "SOOS_CONTRIBUTING_DEVELOPER";
+    public static final String SOOS_CONTRIBUTING_DEVELOPER_ENV = "SOOS_CONTRIBUTING_DEVELOPER_ENV";
 
     // Params Arguments
     public static final String PARAM_ON_FAILURE_KEY = "of";
@@ -84,6 +86,8 @@ public class Constants {
     public static final String PARAM_OPERATING_ENVIRONMENT_KEY = "oe";
     public static final String PARAM_INTEGRATION_NAME_KEY = "intn";
     public static final String PARAM_PACKAGE_MANAGERS_KEY = "pkgm";
+    public static final String PARAM_CONTRIBUTING_DEVELOPER_KEY = "cdev";
+    public static final String PARAM_CONTRIBUTING_DEVELOPER_ENV_KEY = "cdeve";
 
     public static final String MAP_PARAM_CLIENT_ID_KEY = "clientId";
     public static final String MAP_PARAM_API_KEY = "apiKey";
@@ -104,6 +108,8 @@ public class Constants {
     public static final String MAP_PARAM_OPERATING_ENVIRONMENT_KEY = "operatingEnvironment";
     public static final String MAP_PARAM_INTEGRATION_NAME_KEY = "integrationName";
     public static final String MAP_PARAM_PACKAGE_MANAGERS_KEY = "packageManagers";
+    public static final String MAP_PARAM_CONTRIBUTING_DEVELOPER_KEY = "contributingDeveloper";
+    public static final String MAP_PARAM_CONTRIBUTING_DEVELOPER_ENV_KEY = "contributingDeveloperEnv";
 
     // Report Status
     public static final String REPORT_STATUS_FINISHED = "Finished";
