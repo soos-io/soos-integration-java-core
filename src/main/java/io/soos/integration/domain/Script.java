@@ -6,10 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Script {
@@ -42,20 +39,30 @@ public class Script {
         this.setPackageManagers();
     }
 
-    public void setPackageManagers() {
+    public void setPackageManagers() throws IllegalArgumentException {
         String packageManagers = this.params.get(Constants.MAP_PARAM_PACKAGE_MANAGERS_KEY);
         this.packageManagers = new ArrayList<>();
-        if(StringUtils.isNotBlank(packageManagers)){
-            List<String> packageManagersList = new ArrayList<>();
-            packageManagersList.addAll(Arrays.stream(packageManagers.split(",")).map(String::trim).collect(Collectors.toList()));
-            for(String packageManager:packageManagersList){
-                this.packageManagers.add(Arrays.stream(PackageManagers.values())
-                        .filter(e -> e.name().equalsIgnoreCase(packageManager)).findAny().orElse(null));
+        if (StringUtils.isNotBlank(packageManagers)) {
+            List<String> packageManagersList = Arrays.stream(packageManagers.split(","))
+                    .map(String::trim)
+                    .collect(Collectors.toList());
+            String validOptions = Arrays.stream(PackageManagers.values())
+                    .map(Enum::name)
+                    .collect(Collectors.joining(", "));
+            for (String packageManager : packageManagersList) {
+                PackageManagers matchedPackageManager = Arrays.stream(PackageManagers.values())
+                        .filter(e -> e.name().equalsIgnoreCase(packageManager))
+                        .findAny()
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Invalid package manager: " + packageManager +
+                                        ", valid options are: " + validOptions));
+                this.packageManagers.add(matchedPackageManager);
             }
-        }else{
+        } else {
             this.packageManagers = null;
         }
     }
+
 
     private void setOnFailure() {
         String onFailure = this.params.get(Constants.MAP_PARAM_ON_FAILURE_KEY);

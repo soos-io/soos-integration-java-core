@@ -1,7 +1,7 @@
 package io.soos.integration.domain;
 
 public enum PackageManagers {
-    DART("Dart"), ERLANG("Erlang"), HOMEBREW("Homebrew"), JAVA("Java"), NPM("NPM"), NUGET("NuGet"), PHP("PHP"), PYTHON("Python"), RUBY("Ruby"), RUST("Rust"), GO("Go");
+    DART("Dart"), CFAMILY("CFamily"), ERLANG("Erlang"), HOMEBREW("Homebrew"), JAVA("Java"), NPM("NPM"), NUGET("NuGet"), PHP("PHP"), PYTHON("Python"), RUBY("Ruby"), RUST("Rust"), GO("Go");
 
     private String packageManager;
 
