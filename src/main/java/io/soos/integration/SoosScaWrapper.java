@@ -3,8 +3,11 @@ package io.soos.integration;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -12,9 +15,11 @@ public class SoosScaWrapper {
     private static final Logger LOG = Logger.getLogger(SoosScaWrapper.class.getName());
 
     private Configuration config;
+    private PrintStream logger;
 
-    public SoosScaWrapper(Configuration config) {
+    public SoosScaWrapper(Configuration config, PrintStream logger) {
         this.config = config;
+        this.logger = logger;
     }
 
     public int runSca() throws IOException, InterruptedException, NpmNotFoundException {
@@ -65,29 +70,39 @@ public class SoosScaWrapper {
             throw new NpmNotFoundException("npm is not installed or not found in PATH.", e);
         }
     }
-
-    private int execCommand(String command, String arguments) throws IOException, InterruptedException{
+    
+    private int execCommand(String command, String... arguments) throws IOException, InterruptedException {
         String normalizedNodePath = getNormalizedNodePath(config.getNodePath());
-        ProcessBuilder processBuilder = new ProcessBuilder(normalizedNodePath + command, arguments);
+    
+        List<String> commandParts = new ArrayList<>();
+        commandParts.add(normalizedNodePath + command); // Add command
+        Collections.addAll(commandParts, arguments); // Add all arguments
+    
+        ProcessBuilder processBuilder = new ProcessBuilder(commandParts);
         processBuilder.redirectErrorStream(true);
-        LOG.info("Running command: " + normalizedNodePath +  command + " " + arguments);
+    
         Process process = processBuilder.start();
-
+    
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                LOG.info(line);
+                logger.println(line);
             }
         }
-
+    
         int exitCode = process.waitFor();
-        LOG.info("Exit code: " + exitCode);
         return exitCode;
     }
 
     private int runSoosSca(String cliArguments) throws IOException, InterruptedException {
-        execCommand("npm", "install --prefix ./soos @soos-io/soos-sca");
-        return execCommand("node", "./soos/node_modules/@soos-io/soos-sca/bin/index.js " + cliArguments);
+        String npmCommand = System.getProperty("os.name").toLowerCase().contains("win") ? "npm.cmd" : "npm";
+        execCommand(npmCommand, "install", "--prefix", "./soos", "@soos-io/soos-sca");        
+        String[] splitArguments = cliArguments.split("\\s+(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+        String[] fullCommand = new String[splitArguments.length + 2];
+        fullCommand[0] = "node";
+        fullCommand[1] = "./soos/node_modules/@soos-io/soos-sca/bin/index.js";
+        System.arraycopy(splitArguments, 0, fullCommand, 2, splitArguments.length);
+        return execCommand(fullCommand[0], Arrays.copyOfRange(fullCommand, 1, fullCommand.length));
     }
 
     static class NpmNotFoundException extends Exception {
