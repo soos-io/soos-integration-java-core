@@ -47,6 +47,10 @@ public class SoosScaWrapper {
                             commandArguments.add(argument);
                         }
                     } else {
+                        // if the value is a string and is empty we don't add it to the command
+                        if (value instanceof String && ((String) value).isEmpty()) {
+                            continue;
+                        }
                         commandArguments.add(argument + "=\"" + value.toString() + "\"");
                     }
                 }
@@ -64,10 +68,11 @@ public class SoosScaWrapper {
 
     private void checkNpmInstalled(String nodePath) throws IOException, InterruptedException, NpmNotFoundException {
         try {
+            logger.println("Checking if Node is installed...");
             execCommand("node", "--version");
         } catch (IOException | InterruptedException e) {
-            LOG.info("npm is not installed or not found in PATH.");
-            throw new NpmNotFoundException("npm is not installed or not found in PATH.", e);
+            LOG.info("Node is not installed or not found in PATH. Make sure you have Node (At least v18.18.2) and a available in your PATH.");
+            throw new NpmNotFoundException("Node is not installed or not found in PATH.", e);
         }
     }
     
@@ -96,7 +101,8 @@ public class SoosScaWrapper {
 
     private int runSoosSca(String cliArguments) throws IOException, InterruptedException {
         String npmCommand = System.getProperty("os.name").toLowerCase().contains("win") ? "npm.cmd" : "npm";
-        execCommand(npmCommand, "install", "--prefix", "./soos", "@soos-io/soos-sca");        
+        execCommand(npmCommand, "install", "--prefix", "./soos", "@soos-io/soos-sca");
+        // NOTE - We split every argument so they are taken as separate arguments by the execCommand method that uses ProcessBuilder
         String[] splitArguments = cliArguments.split("\\s+(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
         String[] fullCommand = new String[splitArguments.length + 2];
         fullCommand[0] = "node";
