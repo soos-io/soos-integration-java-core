@@ -14,7 +14,7 @@ public class Configuration {
     private String contributingDeveloperSource;
     private String contributingDeveloperSourceName;
     private String integrationName;
-    private String integrationType;
+    private String integrationType = "Plugin";
     private String logLevel;
     private String nodePath;
     private String onFailure;

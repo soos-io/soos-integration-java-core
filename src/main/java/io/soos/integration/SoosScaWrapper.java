@@ -7,7 +7,6 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -24,13 +23,13 @@ public class SoosScaWrapper {
 
     public int runSca() throws IOException, InterruptedException, NpmNotFoundException {
         checkNpmInstalled(config.getNodePath());
-        String cliArguments = mapConfigToCLIArguments(config);
+        List<String> cliArguments = mapConfigToCLIArguments(config);
 
         return runSoosSca(cliArguments);
     }
 
 
-    private String mapConfigToCLIArguments(Configuration config) {
+    private List<String> mapConfigToCLIArguments(Configuration config) {
         List<String> commandArguments = new ArrayList<>();
         for (Field field : Configuration.class.getDeclaredFields()) {
             try {
@@ -51,14 +50,14 @@ public class SoosScaWrapper {
                         if (value instanceof String && ((String) value).isEmpty()) {
                             continue;
                         }
-                        commandArguments.add(argument + "=\"" + value.toString() + "\"");
+                        commandArguments.add(argument + "=" + value.toString() + "");
                     }
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        return String.join(" ", commandArguments);
+        return commandArguments;
     }
     
 
@@ -69,23 +68,22 @@ public class SoosScaWrapper {
     private void checkNpmInstalled(String nodePath) throws IOException, InterruptedException, NpmNotFoundException {
         try {
             logger.println("Checking if Node is installed...");
-            execCommand("node", "--version");
+            execCommand("node", new ArrayList<>(Arrays.asList("--version")));
         } catch (IOException | InterruptedException e) {
             LOG.info("Node is not installed or not found in PATH. Make sure you have Node (At least v18.18.2) and a available in your PATH.");
             throw new NpmNotFoundException("Node is not installed or not found in PATH.", e);
         }
     }
     
-    private int execCommand(String command, String... arguments) throws IOException, InterruptedException {
+    private int execCommand(String command, List<String> arguments) throws IOException, InterruptedException {
         String normalizedNodePath = getNormalizedNodePath(config.getNodePath());
     
         List<String> commandParts = new ArrayList<>();
-        commandParts.add(normalizedNodePath + command); // Add command
-        Collections.addAll(commandParts, arguments); // Add all arguments
-    
+        commandParts.add(normalizedNodePath + command);
+        commandParts.addAll(arguments);
+
         ProcessBuilder processBuilder = new ProcessBuilder(commandParts);
         processBuilder.redirectErrorStream(true);
-    
         Process process = processBuilder.start();
     
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
@@ -99,16 +97,13 @@ public class SoosScaWrapper {
         return exitCode;
     }
 
-    private int runSoosSca(String cliArguments) throws IOException, InterruptedException {
+    private int runSoosSca(List<String> cliArguments) throws IOException, InterruptedException {
         String npmCommand = System.getProperty("os.name").toLowerCase().contains("win") ? "npm.cmd" : "npm";
-        execCommand(npmCommand, "install", "--prefix", "./soos", "@soos-io/soos-sca");
-        // NOTE - We split every argument so they are taken as separate arguments by the execCommand method that uses ProcessBuilder
-        String[] splitArguments = cliArguments.split("\\s+(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-        String[] fullCommand = new String[splitArguments.length + 2];
-        fullCommand[0] = "node";
-        fullCommand[1] = "./soos/node_modules/@soos-io/soos-sca/bin/index.js";
-        System.arraycopy(splitArguments, 0, fullCommand, 2, splitArguments.length);
-        return execCommand(fullCommand[0], Arrays.copyOfRange(fullCommand, 1, fullCommand.length));
+        execCommand(npmCommand, new ArrayList<>(Arrays.asList("install", "--prefix", "./soos", "@soos-io/soos-sca")));
+        List<String> fullCommand = new ArrayList<>();
+        fullCommand.add("./soos/node_modules/@soos-io/soos-sca/bin/index.js");
+        fullCommand.addAll(cliArguments);
+        return execCommand("node", fullCommand);
     }
 
     static class NpmNotFoundException extends Exception {
