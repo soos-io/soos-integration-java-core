@@ -49,6 +49,7 @@ public class SoosScaWrapper {
                         // if the value is a string and is empty we don't add it to the command
                         if (value instanceof String && ((String) value).isEmpty()) {
                             continue;
+
                         }
                         commandArguments.add(argument + "=" + value.toString() + "");
                     }
@@ -59,7 +60,7 @@ public class SoosScaWrapper {
         }
         return commandArguments;
     }
-    
+
 
     private String getNormalizedNodePath(String nodePath) {
         return nodePath == null || nodePath.isEmpty() ? "" : nodePath.replace("\\", "/") + "/";
@@ -74,10 +75,10 @@ public class SoosScaWrapper {
             throw new NpmNotFoundException("Node is not installed or not found in PATH.", e);
         }
     }
-    
+
     private int execCommand(String command, List<String> arguments) throws IOException, InterruptedException {
         String normalizedNodePath = getNormalizedNodePath(config.getNodePath());
-    
+
         List<String> commandParts = new ArrayList<>();
         commandParts.add(normalizedNodePath + command);
         commandParts.addAll(arguments);
@@ -85,14 +86,14 @@ public class SoosScaWrapper {
         ProcessBuilder processBuilder = new ProcessBuilder(commandParts);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
-    
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 logger.println(line);
             }
         }
-    
+
         int exitCode = process.waitFor();
         return exitCode;
     }
