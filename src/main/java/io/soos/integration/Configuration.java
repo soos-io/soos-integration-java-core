@@ -13,21 +13,22 @@ public class Configuration {
     private String contributingDeveloperId;
     private String contributingDeveloperSource;
     private String contributingDeveloperSourceName;
+    private String directoriesToExclude;
+    private String filesToExclude;
     private String integrationName;
     private String integrationType = "Plugin";
     private String logLevel;
     private String nodePath;
     private String onFailure;
     private String operatingEnvironment;
-    private String projectName;
-    private String scriptVersion;
-    private boolean verbose;
-    private String directoriesToExclude;
-    private String filesToExclude;
     private String outputFormat;
     private String packageManagers;
+    private String projectName;
+    private String scriptVersion;
     private String sourceCodePath;
+    private boolean verbose;
     private String workingDirectory;
+
 
     public String getApiKey() {
         return apiKey;
@@ -125,6 +126,22 @@ public class Configuration {
         this.contributingDeveloperSourceName = contributingDeveloperSourceName;
     }
 
+    public String getDirectoriesToExclude() {
+        return directoriesToExclude;
+    }
+
+    public void setDirectoriesToExclude(String directoriesToExclude) {
+        this.directoriesToExclude = directoriesToExclude;
+    }
+
+    public String getFilesToExclude() {
+        return filesToExclude;
+    }
+
+    public void setFilesToExclude(String filesToExclude) {
+        this.filesToExclude = filesToExclude;
+    }
+
     public String getIntegrationName() {
         return integrationName;
     }
@@ -173,46 +190,6 @@ public class Configuration {
         this.operatingEnvironment = operatingEnvironment;
     }
 
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getScriptVersion() {
-        return scriptVersion;
-    }
-
-    public void setScriptVersion(String scriptVersion) {
-        this.scriptVersion = scriptVersion;
-    }
-
-    public boolean isVerbose() {
-        return verbose;
-    }
-
-    public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
-    }
-
-    public String getDirectoriesToExclude() {
-        return directoriesToExclude;
-    }
-
-    public void setDirectoriesToExclude(String directoriesToExclude) {
-        this.directoriesToExclude = directoriesToExclude;
-    }
-
-    public String getFilesToExclude() {
-        return filesToExclude;
-    }
-
-    public void setFilesToExclude(String filesToExclude) {
-        this.filesToExclude = filesToExclude;
-    }
-
     public String getOutputFormat() {
         return outputFormat;
     }
@@ -229,12 +206,36 @@ public class Configuration {
         this.packageManagers = packageManagers;
     }
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getScriptVersion() {
+        return scriptVersion;
+    }
+
+    public void setScriptVersion(String scriptVersion) {
+        this.scriptVersion = scriptVersion;
+    }
+
     public String getSourceCodePath() {
         return sourceCodePath;
     }
 
     public void setSourceCodePath(String sourceCodePath) {
         this.sourceCodePath = sourceCodePath;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
     }
 
     public String getWorkingDirectory() {
@@ -244,5 +245,4 @@ public class Configuration {
     public void setWorkingDirectory(String workingDirectory) {
         this.workingDirectory = workingDirectory;
     }
-
 }

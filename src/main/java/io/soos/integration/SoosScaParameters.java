@@ -13,19 +13,19 @@ public interface SoosScaParameters {
     String CONTRIBUTING_DEVELOPER_ID = "contributingDeveloperId";
     String CONTRIBUTING_DEVELOPER_SOURCE = "contributingDeveloperSource";
     String CONTRIBUTING_DEVELOPER_SOURCE_NAME = "contributingDeveloperSourceName";
+    String DIRECTORIES_TO_EXCLUDE = "directoriesToExclude";
+    String FILES_TO_EXCLUDE = "filesToExclude";
     String INTEGRATION_NAME = "integrationName";
     String INTEGRATION_TYPE = "integrationType";
     String LOG_LEVEL = "logLevel";
     String NODE_PATH = "nodePath";
     String ON_FAILURE = "onFailure";
     String OPERATING_ENVIRONMENT = "operatingEnvironment";
-    String PROJECT_NAME = "projectName";
-    String SCRIPT_VERSION = "scriptVersion";
-    String VERBOSE = "verbose";
-    String DIRECTORIES_TO_EXCLUDE = "directoriesToExclude";
-    String FILES_TO_EXCLUDE = "filesToExclude";
     String OUTPUT_FORMAT = "outputFormat";
     String PACKAGE_MANAGERS = "packageManagers";
+    String PROJECT_NAME = "projectName";
+    String SCRIPT_VERSION = "scriptVersion";
     String SOURCE_CODE_PATH = "sourceCodePath";
+    String VERBOSE = "verbose";
     String WORKING_DIRECTORY = "workingDirectory";
 }
